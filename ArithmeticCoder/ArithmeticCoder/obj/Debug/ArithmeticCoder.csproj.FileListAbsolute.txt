@@ -8,3 +8,13 @@ C:\Users\Andrei\source\repos\ACS-CodareAvansata\ArithmeticCoder\ArithmeticCoder\
 C:\Users\Andrei\source\repos\ACS-CodareAvansata\ArithmeticCoder\ArithmeticCoder\obj\Debug\ArithmeticCoder.csproj.CoreCompileInputs.cache
 C:\Users\Andrei\source\repos\ACS-CodareAvansata\ArithmeticCoder\ArithmeticCoder\obj\Debug\ArithmeticCoder.exe
 C:\Users\Andrei\source\repos\ACS-CodareAvansata\ArithmeticCoder\ArithmeticCoder\obj\Debug\ArithmeticCoder.pdb
+C:\Users\Andrei\source\repos\ACS-CodareAvansata\compression-algorithms\ArithmeticCoder\ArithmeticCoder\bin\Debug\ArithmeticCoder.exe.config
+C:\Users\Andrei\source\repos\ACS-CodareAvansata\compression-algorithms\ArithmeticCoder\ArithmeticCoder\bin\Debug\ArithmeticCoder.exe
+C:\Users\Andrei\source\repos\ACS-CodareAvansata\compression-algorithms\ArithmeticCoder\ArithmeticCoder\bin\Debug\ArithmeticCoder.pdb
+C:\Users\Andrei\source\repos\ACS-CodareAvansata\compression-algorithms\ArithmeticCoder\ArithmeticCoder\obj\Debug\ArithmeticCoder.MainForm.resources
+C:\Users\Andrei\source\repos\ACS-CodareAvansata\compression-algorithms\ArithmeticCoder\ArithmeticCoder\obj\Debug\ArithmeticCoder.Properties.Resources.resources
+C:\Users\Andrei\source\repos\ACS-CodareAvansata\compression-algorithms\ArithmeticCoder\ArithmeticCoder\obj\Debug\ArithmeticCoder.csproj.GenerateResource.cache
+C:\Users\Andrei\source\repos\ACS-CodareAvansata\compression-algorithms\ArithmeticCoder\ArithmeticCoder\obj\Debug\ArithmeticCoder.csproj.CoreCompileInputs.cache
+C:\Users\Andrei\source\repos\ACS-CodareAvansata\compression-algorithms\ArithmeticCoder\ArithmeticCoder\obj\Debug\ArithmeticCoder.exe
+C:\Users\Andrei\source\repos\ACS-CodareAvansata\compression-algorithms\ArithmeticCoder\ArithmeticCoder\obj\Debug\ArithmeticCoder.pdb
+C:\Users\Andrei\source\repos\ACS-CodareAvansata\compression-algorithms\ArithmeticCoder\ArithmeticCoder\obj\Debug\ArithmeticCoder.csprojAssemblyReference.cache
