@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,6 +25,21 @@ namespace ArithmeticCoder
         public Coder(BitWriter writer)
         {
             Writer = writer;
+        }
+
+        public static void CompressFile(string inputFile, string outputFile)
+        {
+            BitReader reader = new BitReader(inputFile);
+            var inputSize = new FileInfo(inputFile).Length;
+
+            for (var i = inputSize - 1; i >= 0; i--)
+            {
+                byte symbol = Convert.ToByte(reader.ReadNBits(8));
+                
+                // Encode each symbol and update the model
+
+            }
+
         }
         
     }
