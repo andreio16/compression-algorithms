@@ -14,6 +14,7 @@ namespace ArithmeticCoder
 
         private UInt32 High = 0xFFFFFFFF;
         private UInt32 Low = 0x00000000;
+        private UInt32 UnderflowBits = 0;
 
         private readonly UInt32 FirstShiftingMask_1 = 0x80000000;
         private readonly UInt32 FirstShiftingMask_2 = 0x0FFFFFFF;
@@ -25,6 +26,14 @@ namespace ArithmeticCoder
         public Coder(BitWriter writer)
         {
             Writer = writer;
+        }
+
+        private void EncodeSymbol(int symbol, Model arihmeticModel)
+        {
+            Range = (ulong)High - Low + 1;
+            High = Low + (uint)(Range * arihmeticModel.GetSymbolSumLimitH(symbol) / arihmeticModel.GetSymbolSumTot() - 1);
+            Low = Low + (uint)(Range * arihmeticModel.GetSymbolSum(symbol) / arihmeticModel.GetSymbolSumTot());
+
         }
 
         public static void CompressFile(string inputFile, string outputFile)
