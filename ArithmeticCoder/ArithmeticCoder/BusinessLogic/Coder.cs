@@ -16,12 +16,9 @@ namespace ArithmeticCoder
         private UInt32 Low = 0x00000000;
         private UInt32 UnderflowBits = 0;
 
-        private readonly UInt32 FirstShiftingMask_1 = 0x80000000;
-        private readonly UInt32 FirstShiftingMask_2 = 0x0FFFFFFF;
-
-        private readonly UInt32 SecondShiftingMask = 0xC0000000;
-        private readonly UInt32 SecondShigtingHigh = 0x80000000;
-        private readonly UInt32 SecondShigtingLow = 0x40000000;
+        private readonly UInt32 FirstShiftingMask = 0x80000000;
+        private readonly UInt32 SecondShigtingMask_1 = 0x40000000;
+        private readonly UInt32 SecondShigtingMask_2 = 0x3FFFFFFF;
 
         public Coder(BitWriter writer)
         {
@@ -31,15 +28,47 @@ namespace ArithmeticCoder
         private void EncodeSymbol(int symbol, Model arihmeticModel)
         {
             Range = (ulong)High - Low + 1;
-            High = Low + (uint)(Range * arihmeticModel.GetSymbolSumLimitH(symbol) / arihmeticModel.GetSymbolSumTot() - 1);
-            Low = Low + (uint)(Range * arihmeticModel.GetSymbolSum(symbol) / arihmeticModel.GetSymbolSumTot());
+            High = Low + (uint)((Range * arihmeticModel.GetSymbolSumLimitH(symbol)) / arihmeticModel.GetSymbolTotalSum() - 1);
+            Low = Low + (uint)((Range * arihmeticModel.GetSymbolSumLimitL(symbol)) / arihmeticModel.GetSymbolTotalSum());
+
+            for (; ; )
+            {
+                // Test First shift MSB(H) = MSB(L) = 0 or MSB(H) = MSB(L) = 1
+                if ((High & FirstShiftingMask) == (Low & FirstShiftingMask))
+                {
+                    uint msbFromHigh = (High >> 31);
+                    Writer.WriteNBits(msbFromHigh, 1);
+                    while (UnderflowBits > 0)
+                    {
+                        Writer.WriteNBits(~msbFromHigh, 1);
+                        UnderflowBits--;
+                    }
+                }
+                // Test Second shift (first 2 semnificative bits of H = 10; L = 01;)
+                else if ((Low & SecondShigtingMask_1) != 0 && (High & FirstShiftingMask) != 0)
+                {
+                    UnderflowBits++;
+                    High |= SecondShigtingMask_1;
+                    Low &= SecondShigtingMask_2;
+                }
+                else
+                    return;
+                High <<= 1;
+                High |= 1;
+                Low <<= 1;
+            }
 
         }
 
         public static void CompressFile(string inputFile, string outputFile)
         {
+            // Read uncompressed file variables
             BitReader reader = new BitReader(inputFile);
             var inputSize = new FileInfo(inputFile).Length;
+
+            // Write compressed file variables
+            BitWriter writer = new BitWriter(outputFile);
+            Coder arithmeticCoder = new Coder(writer);
 
             for (var i = inputSize - 1; i >= 0; i--)
             {

@@ -43,7 +43,7 @@ namespace ArithmeticCoder
 
         
         //--------  Getters for sum[] vector  --------//
-        public uint GetSymbolSum(int symbol)
+        public uint GetSymbolSumLimitL(int symbol)
         {
             return SymbolCounts[symbol];
         }
@@ -53,7 +53,7 @@ namespace ArithmeticCoder
             return SymbolCounts[symbol + 1];
         }
 
-        public uint GetSymbolSumTot()
+        public uint GetSymbolTotalSum()
         {
             return SymbolCounts[NumberOfSymbols];
         }
