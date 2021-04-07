@@ -15,7 +15,7 @@ namespace ArithmeticCoder
 
         public BitWriter(string filePath)
         {
-            outputFile = new FileStream(filePath, FileMode.Open);
+            outputFile = new FileStream(filePath, FileMode.OpenOrCreate);
         }
 
         private static byte BitToBeWritten(uint value)

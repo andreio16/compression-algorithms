@@ -29,22 +29,90 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
+            this.textBoxOutput = new System.Windows.Forms.TextBox();
+            this.textBoxInputPath = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.btnBrowseFile = new System.Windows.Forms.Button();
+            this.btnCompress = new System.Windows.Forms.Button();
+            this.btnDecompress = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(503, 240);
+            this.label1.Location = new System.Drawing.Point(31, 135);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(46, 17);
+            this.label1.Size = new System.Drawing.Size(59, 17);
             this.label1.TabIndex = 0;
-            this.label1.Text = "label1";
+            this.label1.Text = "Output :";
+            // 
+            // textBoxOutput
+            // 
+            this.textBoxOutput.BackColor = System.Drawing.SystemColors.Control;
+            this.textBoxOutput.Location = new System.Drawing.Point(34, 155);
+            this.textBoxOutput.Multiline = true;
+            this.textBoxOutput.Name = "textBoxOutput";
+            this.textBoxOutput.ReadOnly = true;
+            this.textBoxOutput.Size = new System.Drawing.Size(546, 109);
+            this.textBoxOutput.TabIndex = 1;
+            // 
+            // textBoxInputPath
+            // 
+            this.textBoxInputPath.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.textBoxInputPath.Location = new System.Drawing.Point(75, 65);
+            this.textBoxInputPath.Name = "textBoxInputPath";
+            this.textBoxInputPath.Size = new System.Drawing.Size(361, 22);
+            this.textBoxInputPath.TabIndex = 2;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(31, 68);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(38, 17);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "File :";
+            // 
+            // btnBrowseFile
+            // 
+            this.btnBrowseFile.Location = new System.Drawing.Point(463, 62);
+            this.btnBrowseFile.Name = "btnBrowseFile";
+            this.btnBrowseFile.Size = new System.Drawing.Size(117, 29);
+            this.btnBrowseFile.TabIndex = 4;
+            this.btnBrowseFile.Text = "Browse File";
+            this.btnBrowseFile.UseVisualStyleBackColor = true;
+            this.btnBrowseFile.Click += new System.EventHandler(this.btnBrowseFile_Click);
+            // 
+            // btnCompress
+            // 
+            this.btnCompress.Location = new System.Drawing.Point(295, 347);
+            this.btnCompress.Name = "btnCompress";
+            this.btnCompress.Size = new System.Drawing.Size(117, 29);
+            this.btnCompress.TabIndex = 5;
+            this.btnCompress.Text = "Compress";
+            this.btnCompress.UseVisualStyleBackColor = true;
+            this.btnCompress.Click += new System.EventHandler(this.btnCompress_Click);
+            // 
+            // btnDecompress
+            // 
+            this.btnDecompress.Location = new System.Drawing.Point(463, 347);
+            this.btnDecompress.Name = "btnDecompress";
+            this.btnDecompress.Size = new System.Drawing.Size(117, 29);
+            this.btnDecompress.TabIndex = 6;
+            this.btnDecompress.Text = "Decompress";
+            this.btnDecompress.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(609, 400);
+            this.Controls.Add(this.btnDecompress);
+            this.Controls.Add(this.btnCompress);
+            this.Controls.Add(this.btnBrowseFile);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.textBoxInputPath);
+            this.Controls.Add(this.textBoxOutput);
             this.Controls.Add(this.label1);
             this.Name = "MainForm";
             this.Text = "Arithmetic Coder";
@@ -56,6 +124,12 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox textBoxOutput;
+        private System.Windows.Forms.TextBox textBoxInputPath;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button btnBrowseFile;
+        private System.Windows.Forms.Button btnCompress;
+        private System.Windows.Forms.Button btnDecompress;
     }
 }
 

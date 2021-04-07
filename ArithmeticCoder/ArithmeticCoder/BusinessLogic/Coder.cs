@@ -36,13 +36,9 @@ namespace ArithmeticCoder
                 // Test First shift MSB(H) = MSB(L) = 0 or MSB(H) = MSB(L) = 1
                 if ((High & FirstShiftingMask) == (Low & FirstShiftingMask))
                 {
+                    // Send the stabilized bit and the shiftings
                     uint msbFromHigh = (High >> 31);
-                    Writer.WriteNBits(msbFromHigh, 1);
-                    while (UnderflowBits > 0)
-                    {
-                        Writer.WriteNBits(~msbFromHigh, 1);
-                        UnderflowBits--;
-                    }
+                    WriteBitAndUnderflowBits(msbFromHigh);
                 }
                 // Test Second shift (first 2 semnificative bits of H = 10; L = 01;)
                 else if ((Low & SecondShigtingMask_1) != 0 && (High & FirstShiftingMask) != 0)
@@ -60,6 +56,24 @@ namespace ArithmeticCoder
 
         }
 
+        private void FlushEncoder()
+        {
+            // Trimitem decodorului bitii din low direct sau prin WriteBitAndUnderflowBits (?)
+            uint msbFromLow = ((Low << 1) >> 31);
+            Writer.WriteNBits(msbFromLow, 1);
+            Writer.WriteNBits(~msbFromLow, 1);
+        }
+
+        private void WriteBitAndUnderflowBits(uint bit)
+        {
+            Writer.WriteNBits(bit, 1);
+            while (UnderflowBits > 0)
+            {
+                Writer.WriteNBits(~bit, 1);
+                UnderflowBits--;
+            }
+        }
+
         public static void CompressFile(string inputFile, string outputFile)
         {
             // Read uncompressed file variables
@@ -69,14 +83,22 @@ namespace ArithmeticCoder
             // Write compressed file variables
             BitWriter writer = new BitWriter(outputFile);
             Coder arithmeticCoder = new Coder(writer);
+            Model arithmeticModel = new Model(257);
 
             for (var i = inputSize - 1; i >= 0; i--)
             {
                 byte symbol = Convert.ToByte(reader.ReadNBits(8));
-                
-                // Encode each symbol and update the model
+
+                // For each symbol and update the model statistics
+                arithmeticModel.UpdateModel(Convert.ToInt32(symbol));
 
             }
+            //arithmeticCoder.EncodeSymbol( (?), arithmeticModel);
+            arithmeticCoder.EncodeSymbol(256, arithmeticModel);
+            arithmeticCoder.FlushEncoder();
+            writer.WriteNBits(1, 7);    // (?)
+            writer.Dispose();
+            reader.Dispose();
 
         }
         

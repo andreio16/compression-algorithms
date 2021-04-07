@@ -31,7 +31,7 @@ namespace ArithmeticCoder
             }
         }
 
-        private void UpdateModel(int symbol)
+        public void UpdateModel(int symbol)
         {
             /* Increment the frequency  */
             SymbolCounts[symbol]++;
@@ -45,17 +45,17 @@ namespace ArithmeticCoder
         //--------  Getters for sum[] vector  --------//
         public uint GetSymbolSumLimitL(int symbol)
         {
-            return SymbolCounts[symbol];
+            return SymbolSums[symbol];
         }
 
         public uint GetSymbolSumLimitH(int symbol)
         {
-            return SymbolCounts[symbol + 1];
+            return SymbolSums[symbol + 1];
         }
 
         public uint GetSymbolTotalSum()
         {
-            return SymbolCounts[NumberOfSymbols];
+            return SymbolSums[NumberOfSymbols];
         }
 
     }
