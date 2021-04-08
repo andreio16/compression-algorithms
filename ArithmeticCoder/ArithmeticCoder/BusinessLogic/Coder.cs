@@ -16,9 +16,9 @@ namespace ArithmeticCoder
         private UInt32 Low = 0x00000000;
         private UInt32 UnderflowBits = 0;
 
-        private readonly UInt32 FirstShiftingMask = 0x80000000;
-        private readonly UInt32 SecondShigtingMask_1 = 0x40000000;
-        private readonly UInt32 SecondShigtingMask_2 = 0x3FFFFFFF;
+        private readonly UInt32 firstShiftingMask  =  0x80000000;
+        private readonly UInt32 secondShigtingMask =  0x40000000;
+        private readonly UInt32 first2BitsMask     =  0x3FFFFFFF;
 
         public Coder(BitWriter writer)
         {
@@ -34,34 +34,41 @@ namespace ArithmeticCoder
             for (; ; )
             {
                 // Test First shift MSB(H) = MSB(L) = 0 or MSB(H) = MSB(L) = 1
-                if ((High & FirstShiftingMask) == (Low & FirstShiftingMask))
+                if ((High & firstShiftingMask) == (Low & firstShiftingMask))
                 {
                     // Send the stabilized bit and the shiftings
                     uint msbFromHigh = (High >> 31);
                     WriteBitAndUnderflowBits(msbFromHigh);
+
+                    // Set the last bit from High and Low
+                    High <<= 1;
+                    High |= 1;
+                    Low <<= 1;
                 }
                 // Test Second shift (first 2 semnificative bits of H = 10; L = 01;)
-                else if ((Low & SecondShigtingMask_1) != 0 && (High & FirstShiftingMask) != 0)
+                else if ((Low & secondShigtingMask) != 0 && (High & secondShigtingMask) == 0)
                 {
                     UnderflowBits++;
-                    High |= SecondShigtingMask_1;
-                    Low &= SecondShigtingMask_2;
+                    High |= secondShigtingMask;
+                    Low &= first2BitsMask;
+
+                    // Set the last bit from High and Low
+                    High <<= 1;
+                    High |= 1;
+                    Low <<= 1;
                 }
                 else
                     return;
-                High <<= 1;
-                High |= 1;
-                Low <<= 1;
             }
 
         }
 
         private void FlushEncoder()
         {
-            // Trimitem decodorului bitii din low direct sau prin WriteBitAndUnderflowBits (?)
+            // Get the second bit from Low
             uint msbFromLow = ((Low << 1) >> 31);
-            Writer.WriteNBits(msbFromLow, 1);
-            Writer.WriteNBits(~msbFromLow, 1);
+            UnderflowBits++;
+            WriteBitAndUnderflowBits(msbFromLow);
         }
 
         private void WriteBitAndUnderflowBits(uint bit)
@@ -90,13 +97,13 @@ namespace ArithmeticCoder
                 byte symbol = Convert.ToByte(reader.ReadNBits(8));
 
                 // For each symbol and update the model statistics
-                arithmeticModel.UpdateModel(Convert.ToInt32(symbol));
+                arithmeticCoder.EncodeSymbol(Convert.ToInt32(symbol), arithmeticModel);
+                //arithmeticModel.UpdateModel(Convert.ToInt32(symbol));
 
             }
-            //arithmeticCoder.EncodeSymbol( (?), arithmeticModel);
             arithmeticCoder.EncodeSymbol(256, arithmeticModel);
             arithmeticCoder.FlushEncoder();
-            writer.WriteNBits(1, 7);    // (?)
+            writer.WriteNBits(1, 7);    
             writer.Dispose();
             reader.Dispose();
 

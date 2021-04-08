@@ -27,7 +27,7 @@ namespace ArithmeticCoder
             for (uint i = 0; i < NumberOfSymbols; i++)
             {
                 SymbolCounts[i] = 1;
-                SymbolSums[i + 1] = NumberOfSymbols - i;
+                SymbolSums[i + 1] = SymbolSums[i] + SymbolCounts[i];
             }
         }
 
