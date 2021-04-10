@@ -101,6 +101,7 @@
             this.btnDecompress.TabIndex = 6;
             this.btnDecompress.Text = "Decompress";
             this.btnDecompress.UseVisualStyleBackColor = true;
+            this.btnDecompress.Click += new System.EventHandler(this.btnDecompress_Click);
             // 
             // MainForm
             // 

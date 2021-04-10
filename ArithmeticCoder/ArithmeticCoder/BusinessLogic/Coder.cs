@@ -9,13 +9,13 @@ namespace ArithmeticCoder
 {
     class Coder
     {
-        private UInt64 Range;
         private BitWriter Writer;
         private Model arithmeticModel;
 
-        private UInt32 High = 0xFFFFFFFF;
-        private UInt32 Low = 0x00000000;
+        private UInt64 Range;
         private UInt32 UnderflowBits = 0;
+        private UInt32 High = 0xFFFFFFFF;
+        private UInt32 Low  = 0x00000000;
 
         private readonly UInt32 firstShiftingMask  =  0x80000000;
         private readonly UInt32 secondShigtingMask =  0x40000000;
@@ -103,8 +103,7 @@ namespace ArithmeticCoder
 
             }
             coder.EncodeSymbol(256);
-            coder.FlushEncoder();
-            //writer.WriteNBits(1, 7);    
+            coder.FlushEncoder();   
             writer.Dispose();
             reader.Dispose();
 

@@ -39,13 +39,26 @@ namespace ArithmeticCoder
 
             if (File.Exists(inputFilePath))
             {
-                outputFilePath = Path.ChangeExtension(inputFilePath, ".ac");
+                outputFilePath = inputFilePath + ".ac";
                 Coder.CompressFile(inputFilePath, outputFilePath);
                 textBoxOutput.Text += $"> Compression done!\r\n";
             }
             else
-                MessageBox.Show("File doesn't exist.");
+                MessageBox.Show("File doesn't exist. Please select a file!");
         }
 
+        private void btnDecompress_Click(object sender, EventArgs e)
+        {
+            inputFilePath = textBoxInputPath.Text;
+
+            if (File.Exists(inputFilePath))
+            {
+                outputFilePath = Path.GetDirectoryName(inputFilePath) + "\\" + Path.GetFileNameWithoutExtension(inputFilePath);
+                Decoder.DecompressFile(inputFilePath, outputFilePath);
+                textBoxOutput.Text += $"> Decompression done!\r\n";
+            }
+            else
+                MessageBox.Show("File doesn't exist. Please select a file!");
+        }
     }
 }

@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessLogic\Coder.cs" />
+    <Compile Include="BusinessLogic\Decoder.cs" />
     <Compile Include="BusinessLogic\Model.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
