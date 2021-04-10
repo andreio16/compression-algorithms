@@ -19,7 +19,6 @@ namespace ArithmeticCoder
         public MainForm()
         {
             InitializeComponent();
-            
         }
 
         private void btnBrowseFile_Click(object sender, EventArgs e)

@@ -11,6 +11,7 @@ namespace ArithmeticCoder
     {
         private UInt64 Range;
         private BitWriter Writer;
+        private Model arithmeticModel;
 
         private UInt32 High = 0xFFFFFFFF;
         private UInt32 Low = 0x00000000;
@@ -23,13 +24,14 @@ namespace ArithmeticCoder
         public Coder(BitWriter writer)
         {
             Writer = writer;
+            arithmeticModel = new Model(257);
         }
 
-        private void EncodeSymbol(int symbol, Model arihmeticModel)
+        private void EncodeSymbol(int symbol)
         {
             Range = (ulong)High - Low + 1;
-            High = Low + (uint)((Range * arihmeticModel.GetSymbolSumLimitH(symbol)) / arihmeticModel.GetSymbolTotalSum() - 1);
-            Low = Low + (uint)((Range * arihmeticModel.GetSymbolSumLimitL(symbol)) / arihmeticModel.GetSymbolTotalSum());
+            High = Low + (uint)((Range * arithmeticModel.GetSymbolSumLimitH(symbol)) / arithmeticModel.GetSymbolTotalSum() - 1);
+            Low = Low + (uint)((Range * arithmeticModel.GetSymbolSumLimitL(symbol)) / arithmeticModel.GetSymbolTotalSum());
 
             for (; ; )
             {
@@ -89,21 +91,20 @@ namespace ArithmeticCoder
 
             // Write compressed file variables
             BitWriter writer = new BitWriter(outputFile);
-            Coder arithmeticCoder = new Coder(writer);
-            Model arithmeticModel = new Model(257);
+            Coder coder = new Coder(writer);
 
             for (var i = inputSize - 1; i >= 0; i--)
             {
-                byte symbol = Convert.ToByte(reader.ReadNBits(8));
+                var symbol = Convert.ToInt32(reader.ReadNBits(8));
 
                 // For each symbol and update the model statistics
-                arithmeticCoder.EncodeSymbol(Convert.ToInt32(symbol), arithmeticModel);
-                //arithmeticModel.UpdateModel(Convert.ToInt32(symbol));
+                coder.EncodeSymbol(symbol);
+                coder.arithmeticModel.UpdateModel(symbol);
 
             }
-            arithmeticCoder.EncodeSymbol(256, arithmeticModel);
-            arithmeticCoder.FlushEncoder();
-            writer.WriteNBits(1, 7);    
+            coder.EncodeSymbol(256);
+            coder.FlushEncoder();
+            //writer.WriteNBits(1, 7);    
             writer.Dispose();
             reader.Dispose();
 
