@@ -10,48 +10,45 @@ namespace ArithmeticCoder
     class BitWriter : IDisposable
     {
         private FileStream outputFile;
-        private int writeBitsCounter = 1;
-        private byte writeBuffer = 0;
+        private int writeBitsCounter = 0;
+        private int writeBuffer = 0;
 
         public BitWriter(string filePath)
         {
             outputFile = new FileStream(filePath, FileMode.OpenOrCreate);
         }
 
-        private static byte BitToBeWritten(uint value)
+        private void WriteBit(uint bit)
         {
-            return (byte)(value % 2);
-        }
-
-        private void WriteBit(UInt32 value)
-        {
-            writeBuffer <<= 1;
-            writeBuffer |= BitToBeWritten(value);
-
-            if (writeBitsCounter % 8 == 0)
+            bit &= 1;
+            if (writeBitsCounter == 7) 
             {
-                outputFile.WriteByte(writeBuffer);
+                writeBuffer |= ((int)bit << writeBitsCounter);
+                outputFile.WriteByte(Convert.ToByte(writeBuffer));
+                writeBitsCounter = 0;
                 writeBuffer = 0;
             }
             else
             {
+                writeBuffer |= ((int)bit << writeBitsCounter);
                 writeBitsCounter++;
             }
-
         }
 
-        public void WriteNBits(UInt32 value, int numOfBits) // n <= 32 
+        public void WriteNBits(uint value, int numOfBits) // n <= 32 
         {
             if (numOfBits > 32)
             {
                 throw new Exception("Numarul de biti care trebuie scris depaseste 32");
             }
 
-            for (int k = numOfBits - 1; k >= 0; k--)
+            for (int i = 0; i < numOfBits; i++)
             {
-                WriteBit(value >> k);
+                WriteBit(value);
+                value >>= 1;
             }
         }
+
 
         public void Dispose()
         {

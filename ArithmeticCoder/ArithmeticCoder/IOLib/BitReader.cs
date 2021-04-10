@@ -10,41 +10,35 @@ namespace ArithmeticCoder
     class BitReader : IDisposable
     {
         private FileStream inputFile;
-        private int readBitsCounter = 8;
-        private byte readBuffer = 0;
+        private int readBitsCounter = 0;
+        private int readBuffer = 0;
 
         public BitReader(string filePath)
         {
             inputFile = new FileStream(filePath, FileMode.Open);
         }
 
-        private UInt32 ReadBit()
+        private uint ReadBit()
         {
-            if (readBitsCounter % 8 == 0)
+            if (readBitsCounter == 0)
             {
                 readBuffer = Convert.ToByte(inputFile.ReadByte());
-                readBitsCounter = 1;
+                readBitsCounter = 8;
             }
-            else
-                readBitsCounter++;
-
-            uint result = Convert.ToUInt32(readBuffer < 128 ? 0 : 1);
-            readBuffer <<= 1;
-
-            return result;
+            readBitsCounter--;
+            uint bit = (uint)(readBuffer % 2);
+            readBuffer >>= 1;
+            return bit;
         }
 
-        public UInt32 ReadNBits(UInt32 n)
+        public uint ReadNBits(int numOfBits)
         {
-            UInt32 result = 0;
+            uint value = 0;
 
-            for (int i = 1; i <= n; i++)
-            {
-                result <<= 1;
-                result = result | ReadBit();
-            }
+            for (int i = 0; i < numOfBits; i++)
+                value |= (ReadBit() << i);
 
-            return result;
+            return value;
         }
 
         public void Dispose()
