@@ -115,6 +115,7 @@
             this.Controls.Add(this.textBoxInputPath);
             this.Controls.Add(this.textBoxOutput);
             this.Controls.Add(this.label1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "MainForm";
             this.Text = "Arithmetic Coder";
             this.ResumeLayout(false);

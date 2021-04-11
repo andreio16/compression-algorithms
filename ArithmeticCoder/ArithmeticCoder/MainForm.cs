@@ -16,6 +16,7 @@ namespace ArithmeticCoder
         private string inputFilePath = @"";
         private string outputFilePath = @"";
 
+
         public MainForm()
         {
             InitializeComponent();
