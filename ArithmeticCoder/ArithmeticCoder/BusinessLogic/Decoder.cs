@@ -21,7 +21,7 @@ namespace ArithmeticCoder
         public Decoder(BitReader reader)
         {
             this.reader = reader;
-            Code = reader.ReadNBits(31);
+            Code = reader.ReadNBits(32);
             arithmeticModel = new Model(257);
         }
 
