@@ -17,8 +17,8 @@ namespace ArithmeticCoder
         private readonly UInt32 firstBitMask   = 0x80000000;
         private readonly UInt32 secondBitMask  = 0x40000000;
         private readonly UInt32 first2BitsMask = 0x3FFFFFFF;
-        
-        private const int EOF = 256, TOTAL_SYMBOLS = 257, NR_BITS_TO_READ = 8;
+
+        private const int EOF = 256, TOTAL_SYMBOLS = 257;
 
         public Decoder(BitReader reader)
         {
@@ -65,10 +65,9 @@ namespace ArithmeticCoder
             BitWriter writer = new BitWriter(outputFile);
             Decoder  decoder = new Decoder(reader);
 
-            var inputSize = NR_BITS_TO_READ * new FileInfo(inputFile).Length;
 
             // reading loop...
-            while (true)
+            for (; ; )
             {
                 uint symbol = decoder.DecodeSymbol();
                 if (symbol == EOF) break;
