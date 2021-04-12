@@ -58,12 +58,19 @@ namespace ArithmeticCoder
         }
 
         //--------  Getters for sum[] vector for Decoder  --------//
-        public uint GetSymbolForSpecifiedSum(uint sum)
+        public uint GetSymbolForSpecifiedSum(uint sum, int EOF)
         {
-            int symbol = 0;
-            for (symbol = 256; sum < SymbolSums[symbol]; symbol--) ;
+            uint symbol;
+            for (symbol = (uint)EOF; sum < SymbolSums[symbol]; symbol--) 
+            {
+                if (symbol <= 0)
+                {
+                    symbol = 0;
+                    break;
+                }
+            }
 
-            return (uint)symbol;
+            return symbol;
         }
 
     }

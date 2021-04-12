@@ -32,7 +32,7 @@ namespace ArithmeticCoder
             Range = (ulong)(High - Low) + 1;
 
             uint code_sum = (uint)(((ulong)(Code - Low + 1) * arithmeticModel.GetSymbolTotalSum() - 1) / Range); 
-            uint symbol = arithmeticModel.GetSymbolForSpecifiedSum(code_sum);
+            uint symbol = arithmeticModel.GetSymbolForSpecifiedSum(code_sum, EOF);
 
             High = Low + (uint)((Range * arithmeticModel.GetSymbolSumLimitH(symbol)) / arithmeticModel.GetSymbolTotalSum() - 1);
             Low  = Low + (uint)((Range * arithmeticModel.GetSymbolSumLimitL(symbol)) / arithmeticModel.GetSymbolTotalSum());
@@ -44,11 +44,11 @@ namespace ArithmeticCoder
                     Low  <<= 1;      
                     High <<= 1;
                     High |= 1;
-                    Code  = (Code << 1) + reader.ReadNBits(1);
+                    Code = (Code << 1) | reader.ReadNBits(1);
                 }
                 else if ((Low & secondBitMask) == secondBitMask && (High & secondBitMask) == 0)
                 {
-                    Code = ((Code ^ secondBitMask) << 1) + reader.ReadNBits(1);
+                    Code = ((Code ^ secondBitMask) << 1) | reader.ReadNBits(1);
                     Low  = (Low & first2BitsMask) << 1;
                     High = ((High | firstBitMask) << 1) | 1;
                 }

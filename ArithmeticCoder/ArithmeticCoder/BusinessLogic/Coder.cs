@@ -41,7 +41,7 @@ namespace ArithmeticCoder
                 if ((High & firstShiftingMask) == (Low & firstShiftingMask))
                 {
                     // Send the stabilized bit and the shiftings
-                    uint msbFromHigh = (High >> 31);                 //uint
+                    uint msbFromHigh = (High >> 31);                 
                     WriteBitAndUnderflowBits(msbFromHigh);
 
                     // Set the last bit from High and Low
@@ -70,17 +70,19 @@ namespace ArithmeticCoder
         private void FlushEncoder()
         {
             // Get the second bit from Low
-            uint msbFromLow = ((Low << 1) >> 31); //uint
+            uint msbFromLow = ((Low << 1) >> 31);
+
+            // Send 2 bits to compressed file : second msb and ~msb 
             UnderflowBits++;
             WriteBitAndUnderflowBits(msbFromLow);
         }
 
-        private void WriteBitAndUnderflowBits(uint bit) //uint bit
+        private void WriteBitAndUnderflowBits(uint bit) 
         {
             Writer.WriteNBits(bit, 1);
             while (UnderflowBits > 0)
             {
-                Writer.WriteNBits(~bit, 1);
+                Writer.WriteNBits(~bit & 0x00000001, 1); //(~bit >> 31)
                 UnderflowBits--;
             }
         }
@@ -111,7 +113,6 @@ namespace ArithmeticCoder
             coder.FlushEncoder();
             writer.WriteNBits(1, 7);
             writer.Dispose();
-
         }
         
     }
