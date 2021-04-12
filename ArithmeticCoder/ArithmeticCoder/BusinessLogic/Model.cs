@@ -31,23 +31,23 @@ namespace ArithmeticCoder
             }
         }
 
-        public void UpdateModel(int symbol)
+        public void UpdateModel(uint symbol)
         {
             /* Increment the frequency  */
             SymbolCounts[symbol]++;
 
             /* Update the cumulative frequencies. */
-            for (int i = symbol; i < NumberOfSymbols; i++)
+            for (uint i = symbol; i < NumberOfSymbols; i++)
                 SymbolSums[i]++;
         }
         
         //--------  Getters for sum[] vector for Coder  --------//
-        public uint GetSymbolSumLimitL(int symbol)
+        public uint GetSymbolSumLimitL(uint symbol)
         {
             return SymbolSums[symbol];
         }
 
-        public uint GetSymbolSumLimitH(int symbol)
+        public uint GetSymbolSumLimitH(uint symbol)
         {
             return SymbolSums[symbol + 1];
         }
@@ -58,14 +58,12 @@ namespace ArithmeticCoder
         }
 
         //--------  Getters for sum[] vector for Decoder  --------//
-        public int GetSymbolForSpecifiedSum(uint sum)
+        public uint GetSymbolForSpecifiedSum(uint sum)
         {
             int symbol = 0;
             for (symbol = 256; sum < SymbolSums[symbol]; symbol--) ;
 
-            return symbol;
-
-
+            return (uint)symbol;
         }
 
     }

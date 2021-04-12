@@ -17,20 +17,22 @@ namespace ArithmeticCoder
         private readonly UInt32 firstBitMask   = 0x80000000;
         private readonly UInt32 secondBitMask  = 0x40000000;
         private readonly UInt32 first2BitsMask = 0x3FFFFFFF;
+        
+        private const int EOF = 256, TOTAL_SYMBOLS = 257, NR_BITS_TO_READ = 8;
 
         public Decoder(BitReader reader)
         {
             this.reader = reader;
             Code = reader.ReadNBits(32);
-            arithmeticModel = new Model(257);
+            arithmeticModel = new Model(TOTAL_SYMBOLS);
         }
 
-        private int DecodeSymbol()
+        private uint DecodeSymbol()
         {
             Range = (ulong)(High - Low) + 1;
 
             uint code_sum = (uint)(((ulong)(Code - Low + 1) * arithmeticModel.GetSymbolTotalSum() - 1) / Range); 
-            int symbol = arithmeticModel.GetSymbolForSpecifiedSum(code_sum);
+            uint symbol = arithmeticModel.GetSymbolForSpecifiedSum(code_sum);
 
             High = Low + (uint)((Range * arithmeticModel.GetSymbolSumLimitH(symbol)) / arithmeticModel.GetSymbolTotalSum() - 1);
             Low  = Low + (uint)((Range * arithmeticModel.GetSymbolSumLimitL(symbol)) / arithmeticModel.GetSymbolTotalSum());
@@ -63,20 +65,21 @@ namespace ArithmeticCoder
             BitWriter writer = new BitWriter(outputFile);
             Decoder  decoder = new Decoder(reader);
 
-            var inputSize = new FileInfo(inputFile).Length;
+            var inputSize = NR_BITS_TO_READ * new FileInfo(inputFile).Length;
 
             // reading loop...
             while (true)
             {
-                int symbol = decoder.DecodeSymbol();
-                if (symbol == 256) break;
-                writer.WriteNBits(Convert.ToByte(symbol), 8);
+                uint symbol = decoder.DecodeSymbol();
+                if (symbol == EOF) break;
+                writer.WriteNBits(symbol, 8);
                 decoder.arithmeticModel.UpdateModel(symbol);
                 
             }
 
-            writer.Dispose();
             reader.Dispose();
+            writer.WriteNBits(1, 7);
+            writer.Dispose();
         }
     }
 }

@@ -11,27 +11,25 @@ namespace ArithmeticCoder
     {
         private FileStream outputFile;
         private int writeBitsCounter = 0;
-        private int writeBuffer = 0;
+        private byte writeBuffer = 0;
 
         public BitWriter(string filePath)
         {
             outputFile = new FileStream(filePath, FileMode.OpenOrCreate);
         }
 
-        private void WriteBit(uint bit)
+        private void WriteBit(uint value)
         {
-            bit &= 1;
-            if (writeBitsCounter == 7) 
+            writeBuffer  = (byte)(writeBuffer << 1);
+            writeBuffer |= BitToBeWritten(value);
+
+            writeBitsCounter++;
+            // Check if buffer is full
+            if (writeBitsCounter == 8)
             {
-                writeBuffer |= ((int)bit << writeBitsCounter);
                 outputFile.WriteByte(Convert.ToByte(writeBuffer));
                 writeBitsCounter = 0;
                 writeBuffer = 0;
-            }
-            else
-            {
-                writeBuffer |= ((int)bit << writeBitsCounter);
-                writeBitsCounter++;
             }
         }
 
@@ -42,13 +40,20 @@ namespace ArithmeticCoder
                 throw new Exception("Numarul de biti care trebuie scris depaseste 32");
             }
 
-            for (int i = 0; i < numOfBits; i++)
+            for (int i = numOfBits-1; i >=0 ; i--)
             {
-                WriteBit(value);
-                value >>= 1;
+                // Take first bit
+                uint bit = 0;
+                int mask = 1 << (i);
+                bit = (uint)((value & mask) >> i);
+                WriteBit(bit);
             }
         }
 
+        private static byte BitToBeWritten(uint value)
+        {
+            return (byte)(value % 2);
+        }
 
         public void Dispose()
         {

@@ -21,13 +21,15 @@ namespace ArithmeticCoder
         private readonly UInt32 secondShigtingMask =  0x40000000;
         private readonly UInt32 first2BitsMask     =  0x3FFFFFFF;
 
+        private const int EOF = 256, TOTAL_SYMBOLS = 257, NR_BITS_TO_READ = 8;
+
         public Coder(BitWriter writer)
         {
             Writer = writer;
-            arithmeticModel = new Model(257);
+            arithmeticModel = new Model(TOTAL_SYMBOLS);
         }
 
-        private void EncodeSymbol(int symbol)
+        private void EncodeSymbol(uint symbol)
         {
             Range = (ulong)High - Low + 1;
             High = Low + (uint)((Range * arithmeticModel.GetSymbolSumLimitH(symbol)) / arithmeticModel.GetSymbolTotalSum() - 1);
@@ -39,7 +41,7 @@ namespace ArithmeticCoder
                 if ((High & firstShiftingMask) == (Low & firstShiftingMask))
                 {
                     // Send the stabilized bit and the shiftings
-                    uint msbFromHigh = (High >> 31);
+                    uint msbFromHigh = (High >> 31);                 //uint
                     WriteBitAndUnderflowBits(msbFromHigh);
 
                     // Set the last bit from High and Low
@@ -68,12 +70,12 @@ namespace ArithmeticCoder
         private void FlushEncoder()
         {
             // Get the second bit from Low
-            uint msbFromLow = ((Low << 1) >> 31);
+            uint msbFromLow = ((Low << 1) >> 31); //uint
             UnderflowBits++;
             WriteBitAndUnderflowBits(msbFromLow);
         }
 
-        private void WriteBitAndUnderflowBits(uint bit)
+        private void WriteBitAndUnderflowBits(uint bit) //uint bit
         {
             Writer.WriteNBits(bit, 1);
             while (UnderflowBits > 0)
@@ -87,25 +89,28 @@ namespace ArithmeticCoder
         {
             // Read uncompressed file variables
             BitReader reader = new BitReader(inputFile);
-            var inputSize = new FileInfo(inputFile).Length;
+            var inputSize = NR_BITS_TO_READ * new FileInfo(inputFile).Length;
 
             // Write compressed file variables
             BitWriter writer = new BitWriter(outputFile);
             Coder coder = new Coder(writer);
 
-            for (var i = inputSize - 1; i >= 0; i--)
+            for (var i = inputSize - 1; i >= 0; i -= 8) 
             {
-                var symbol = Convert.ToInt32(reader.ReadNBits(8));
+                uint symbol = Convert.ToUInt32(reader.ReadNBits(NR_BITS_TO_READ));
 
                 // For each symbol and update the model statistics
                 coder.EncodeSymbol(symbol);
                 coder.arithmeticModel.UpdateModel(symbol);
 
             }
-            coder.EncodeSymbol(256);
-            coder.FlushEncoder();   
-            writer.Dispose();
+
             reader.Dispose();
+
+            coder.EncodeSymbol(EOF);
+            coder.FlushEncoder();
+            writer.WriteNBits(1, 7);
+            writer.Dispose();
 
         }
         
