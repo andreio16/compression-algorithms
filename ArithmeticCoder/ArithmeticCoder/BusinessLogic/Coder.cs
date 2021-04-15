@@ -18,8 +18,7 @@ namespace ArithmeticCoder
         private UInt32 Low  = 0x00000000;
 
         private readonly UInt32 firstShiftingMask  =  0x80000000;
-        private readonly UInt32 secondShigtingMask =  0x40000000;
-        private readonly UInt32 first2BitsMask     =  0x3FFFFFFF;
+        private readonly UInt32 secondShigtingMask =  0xC0000000;
 
         private const int EOF = 256, TOTAL_SYMBOLS = 257, NR_BITS_TO_READ = 8;
 
@@ -41,7 +40,7 @@ namespace ArithmeticCoder
                 if ((High & firstShiftingMask) == (Low & firstShiftingMask))
                 {
                     // Send the stabilized bit and the shiftings
-                    uint msbFromHigh = (High >> 31);                 
+                    uint msbFromHigh = (High >> 31);
                     WriteBitAndUnderflowBits(msbFromHigh);
 
                     // Set the last bit from High and Low
@@ -50,11 +49,11 @@ namespace ArithmeticCoder
                     Low <<= 1;
                 }
                 // Test Second shift (first 2 semnificative bits of H = 10; L = 01;)
-                else if ((Low & secondShigtingMask) != 0 && (High & secondShigtingMask) == 0)
+                else if ((Low & secondShigtingMask) == 0x40000000 && (High & secondShigtingMask) == 0x80000000) 
                 {
                     UnderflowBits++;
-                    High |= secondShigtingMask;
-                    Low &= first2BitsMask;
+                    High |= 0x40000000;
+                    Low  &= 0x3FFFFFFF;
 
                     // Set the last bit from High and Low
                     High <<= 1;
@@ -82,7 +81,7 @@ namespace ArithmeticCoder
             Writer.WriteNBits(bit, 1);
             while (UnderflowBits > 0)
             {
-                Writer.WriteNBits(~bit & 0x00000001, 1); //(~bit >> 31)
+                Writer.WriteNBits((~bit & 0x00000001), 1); //(~bit >> 31)
                 UnderflowBits--;
             }
         }

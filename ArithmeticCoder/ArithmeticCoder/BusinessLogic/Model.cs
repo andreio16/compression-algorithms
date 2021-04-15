@@ -24,7 +24,7 @@ namespace ArithmeticCoder
         private void InitModel()
         {
             SymbolSums[0] = 0;
-            for (int i = 0; i < NumberOfSymbols; i++)
+            for (int i = 0; i < NumberOfSymbols; i++) 
             {
                 SymbolCounts[i] = 1;
                 SymbolSums[i + 1] = SymbolSums[i] + SymbolCounts[i];
@@ -37,7 +37,7 @@ namespace ArithmeticCoder
             SymbolCounts[symbol]++;
 
             /* Update the cumulative frequencies. */
-            for (uint i = symbol; i < NumberOfSymbols; i++)
+            for (uint i = symbol; i < NumberOfSymbols + 1; i++) 
                 SymbolSums[i]++;
         }
         
@@ -63,11 +63,8 @@ namespace ArithmeticCoder
             uint symbol;
             for (symbol = (uint)EOF; sum < SymbolSums[symbol]; symbol--) 
             {
-                if (symbol <= 0)
-                {
-                    symbol = 0;
+                if (symbol == 0)
                     break;
-                }
             }
 
             return symbol;

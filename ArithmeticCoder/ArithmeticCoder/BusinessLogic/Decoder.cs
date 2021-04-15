@@ -15,8 +15,7 @@ namespace ArithmeticCoder
 
 
         private readonly UInt32 firstBitMask   = 0x80000000;
-        private readonly UInt32 secondBitMask  = 0x40000000;
-        private readonly UInt32 first2BitsMask = 0x3FFFFFFF;
+        private readonly UInt32 secondBitMask  = 0xC0000000;
 
         private const int EOF = 256, TOTAL_SYMBOLS = 257;
 
@@ -37,20 +36,21 @@ namespace ArithmeticCoder
             High = Low + (uint)((Range * arithmeticModel.GetSymbolSumLimitH(symbol)) / arithmeticModel.GetSymbolTotalSum() - 1);
             Low  = Low + (uint)((Range * arithmeticModel.GetSymbolSumLimitL(symbol)) / arithmeticModel.GetSymbolTotalSum());
 
+
             for (; ; )
             {
                 if ((High & firstBitMask) == (Low & firstBitMask))
                 {
-                    Low  <<= 1;      
+                    Low <<= 1;
                     High <<= 1;
                     High |= 1;
                     Code = (Code << 1) | reader.ReadNBits(1);
                 }
-                else if ((Low & secondBitMask) == secondBitMask && (High & secondBitMask) == 0)
+                else if ((Low & secondBitMask) == 0x40000000 && (High & secondBitMask) == 0x80000000) 
                 {
-                    Code = ((Code ^ secondBitMask) << 1) | reader.ReadNBits(1);
-                    Low  = (Low & first2BitsMask) << 1;
-                    High = ((High | firstBitMask) << 1) | 1;
+                    Code = ((Code ^ 0x40000000) << 1) | reader.ReadNBits(1);
+                    High = ((High | 0x40000000) << 1) | 1;
+                    Low  = (Low & 0x3FFFFFFF) << 1;
                 }
                 else
                     break;
