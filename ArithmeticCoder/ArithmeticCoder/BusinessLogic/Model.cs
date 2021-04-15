@@ -37,7 +37,7 @@ namespace ArithmeticCoder
             SymbolCounts[symbol]++;
 
             /* Update the cumulative frequencies. */
-            for (uint i = symbol; i < NumberOfSymbols + 1; i++) 
+            for (uint i = symbol + 1; i < NumberOfSymbols + 1; i++)
                 SymbolSums[i]++;
         }
         
@@ -58,13 +58,10 @@ namespace ArithmeticCoder
         }
 
         //--------  Getters for sum[] vector for Decoder  --------//
-        public uint GetSymbolForSpecifiedSum(uint sum, int EOF)
+        public uint GetSymbolForSpecifiedSum(uint sum)
         {
             uint symbol;
-            for (symbol = (uint)EOF; sum < SymbolSums[symbol]; symbol--) 
-            {
-            }
-
+            for (symbol = NumberOfSymbols - 1; sum < SymbolSums[symbol]; symbol--);
             return symbol;
         }
 

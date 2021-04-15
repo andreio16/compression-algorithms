@@ -69,19 +69,22 @@ namespace ArithmeticCoder
         private void FlushEncoder()
         {
             // Get the second bit from Low
-            uint msbFromLow = ((Low << 1) >> 31);
+            uint msbFromLow = Low >> 30;
 
             // Send 2 bits to compressed file : second msb and ~msb 
             UnderflowBits++;
             WriteBitAndUnderflowBits(msbFromLow);
         }
 
-        private void WriteBitAndUnderflowBits(uint bit) 
+        private void WriteBitAndUnderflowBits(uint value) 
         {
-            Writer.WriteNBits(bit, 1);
+            value &= 0x00000001;
+            Writer.WriteNBits(value, 1);
+
+            uint negatedValue = (~value & 0x00000001);
             while (UnderflowBits > 0)
             {
-                Writer.WriteNBits((~bit & 0x00000001), 1); //(~bit >> 31)
+                Writer.WriteNBits(negatedValue, 1); 
                 UnderflowBits--;
             }
         }
