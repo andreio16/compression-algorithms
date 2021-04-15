@@ -63,8 +63,6 @@ namespace ArithmeticCoder
             uint symbol;
             for (symbol = (uint)EOF; sum < SymbolSums[symbol]; symbol--) 
             {
-                if (symbol == 0)
-                    break;
             }
 
             return symbol;
