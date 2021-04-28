@@ -37,7 +37,9 @@ namespace NearLosslessBMPVisualizer
                 BmpFileObject bmpObject = Helpers.ReadBmpFormat(inputFilePathToCompress);
                 pictureBoxOriginalImage.Image = bmpObject.GetBmpImage();
 
+                // orig img/ header/ bmp
 
+                Helpers.DrawHistogram(pictureBoxHistogram, Helpers.CreateHistogram(bmpObject.GetBmpData()));
             }
         }
     }
