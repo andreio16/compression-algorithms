@@ -21,6 +21,7 @@ namespace NearLosslessBMPVisualizer
         public MainForm()
         {
             InitializeComponent();
+            comboBoxHistogram.SelectedIndex = 0;
         }
 
         //-----------------------------------------------------------------------------------------------------------------------
@@ -42,5 +43,6 @@ namespace NearLosslessBMPVisualizer
                 Helpers.DrawHistogram(pictureBoxHistogram, Helpers.CreateHistogram(bmpObject.GetBmpData()));
             }
         }
+
     }
 }
