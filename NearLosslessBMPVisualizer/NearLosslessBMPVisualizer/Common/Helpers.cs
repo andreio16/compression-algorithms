@@ -40,13 +40,13 @@ namespace NearLosslessBMPVisualizer
             return histogram;
         }
 
-        public static void DrawHistogram(PictureBox canvas, int[] histogram)
+        public static void DrawHistogram(PictureBox canvas, int[] histogram, float scale)
         {
             Bitmap temp = new Bitmap(histogram.Length, canvas.Size.Height); //  histogram.Length  (int)(canvas.Size.Height * 0.2)
 
             for (int i = 0; i < histogram.Length; i++)
             {
-                int start = (int)(canvas.Size.Height - histogram[i] * 0.3);
+                int start = (int)(canvas.Size.Height - histogram[i] * scale);
                 if (start < 0) start = 0;
                 if (start > canvas.Size.Height) start = canvas.Size.Height;
                 for (int point = start; point < canvas.Size.Height; point++)

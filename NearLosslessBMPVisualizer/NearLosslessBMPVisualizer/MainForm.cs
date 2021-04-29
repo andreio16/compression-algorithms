@@ -40,7 +40,8 @@ namespace NearLosslessBMPVisualizer
 
                 // orig img/ header/ bmp
 
-                Helpers.DrawHistogram(pictureBoxHistogram, Helpers.CreateHistogram(bmpObject.GetBmpData()));
+                // test histogram
+                Helpers.DrawHistogram(pictureBoxHistogram, Helpers.CreateHistogram(bmpObject.GetBmpData()), (float)numericUpDownHistogramScale.Value);
             }
         }
 
