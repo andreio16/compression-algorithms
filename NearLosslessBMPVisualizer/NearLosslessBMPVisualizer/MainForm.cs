@@ -94,5 +94,6 @@ namespace NearLosslessBMPVisualizer
                 MessageBox.Show("Error, you forgot to load or to encode the image!");
             }
         }
+
     }
 }

@@ -55,6 +55,20 @@
             this.label7 = new System.Windows.Forms.Label();
             this.btnSaveEncodedImage = new System.Windows.Forms.Button();
             this.btnEncodeOriginalImage = new System.Windows.Forms.Button();
+            this.pictureBoxErrorImage = new System.Windows.Forms.PictureBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.groupBoxErrorImage = new System.Windows.Forms.GroupBox();
+            this.comboBoxErrorImage = new System.Windows.Forms.ComboBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.btnRefreshErrorImage = new System.Windows.Forms.Button();
+            this.numericUpDownErrorImageContrast = new System.Windows.Forms.NumericUpDown();
+            this.label13 = new System.Windows.Forms.Label();
+            this.pictureBoxDecodedImage = new System.Windows.Forms.PictureBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.groupBoxDecodedImage = new System.Windows.Forms.GroupBox();
+            this.btnSaveDecodedImage = new System.Windows.Forms.Button();
+            this.btnDecodeImage = new System.Windows.Forms.Button();
+            this.btnLoadDecoded = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxOriginalImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHistogram)).BeginInit();
             this.groupBoxHistogram.SuspendLayout();
@@ -62,6 +76,11 @@
             this.groupBoxOriginalImage.SuspendLayout();
             this.groupBoxErrorValueMinMax.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownKValue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxErrorImage)).BeginInit();
+            this.groupBoxErrorImage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownErrorImageContrast)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDecodedImage)).BeginInit();
+            this.groupBoxDecodedImage.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBoxOriginalImage
@@ -105,7 +124,7 @@
             // pictureBoxHistogram
             // 
             this.pictureBoxHistogram.BackColor = System.Drawing.SystemColors.Control;
-            this.pictureBoxHistogram.Location = new System.Drawing.Point(394, 391);
+            this.pictureBoxHistogram.Location = new System.Drawing.Point(313, 391);
             this.pictureBoxHistogram.Name = "pictureBoxHistogram";
             this.pictureBoxHistogram.Size = new System.Drawing.Size(682, 279);
             this.pictureBoxHistogram.TabIndex = 6;
@@ -118,7 +137,7 @@
             this.groupBoxHistogram.Controls.Add(this.label2);
             this.groupBoxHistogram.Controls.Add(this.comboBoxHistogram);
             this.groupBoxHistogram.Controls.Add(this.btnRefresh);
-            this.groupBoxHistogram.Location = new System.Drawing.Point(394, 324);
+            this.groupBoxHistogram.Location = new System.Drawing.Point(313, 324);
             this.groupBoxHistogram.Name = "groupBoxHistogram";
             this.groupBoxHistogram.Size = new System.Drawing.Size(682, 61);
             this.groupBoxHistogram.TabIndex = 7;
@@ -189,7 +208,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(391, 673);
+            this.label4.Location = new System.Drawing.Point(310, 672);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(37, 17);
             this.label4.TabIndex = 9;
@@ -198,7 +217,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(1044, 673);
+            this.label5.Location = new System.Drawing.Point(963, 672);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(32, 17);
             this.label5.TabIndex = 10;
@@ -207,7 +226,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(731, 673);
+            this.label6.Location = new System.Drawing.Point(650, 672);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(16, 17);
             this.label6.TabIndex = 11;
@@ -382,13 +401,165 @@
             this.btnEncodeOriginalImage.UseVisualStyleBackColor = true;
             this.btnEncodeOriginalImage.Click += new System.EventHandler(this.btnEncodeOriginalImage_Click);
             // 
+            // pictureBoxErrorImage
+            // 
+            this.pictureBoxErrorImage.BackColor = System.Drawing.SystemColors.Control;
+            this.pictureBoxErrorImage.Location = new System.Drawing.Point(313, 29);
+            this.pictureBoxErrorImage.Name = "pictureBoxErrorImage";
+            this.pictureBoxErrorImage.Size = new System.Drawing.Size(294, 289);
+            this.pictureBoxErrorImage.TabIndex = 13;
+            this.pictureBoxErrorImage.TabStop = false;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(414, 9);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(82, 17);
+            this.label12.TabIndex = 14;
+            this.label12.Text = "Error Image";
+            // 
+            // groupBoxErrorImage
+            // 
+            this.groupBoxErrorImage.Controls.Add(this.comboBoxErrorImage);
+            this.groupBoxErrorImage.Controls.Add(this.label14);
+            this.groupBoxErrorImage.Controls.Add(this.btnRefreshErrorImage);
+            this.groupBoxErrorImage.Controls.Add(this.numericUpDownErrorImageContrast);
+            this.groupBoxErrorImage.Controls.Add(this.label13);
+            this.groupBoxErrorImage.Location = new System.Drawing.Point(613, 178);
+            this.groupBoxErrorImage.Name = "groupBoxErrorImage";
+            this.groupBoxErrorImage.Size = new System.Drawing.Size(274, 140);
+            this.groupBoxErrorImage.TabIndex = 15;
+            this.groupBoxErrorImage.TabStop = false;
+            this.groupBoxErrorImage.Text = "Options";
+            // 
+            // comboBoxErrorImage
+            // 
+            this.comboBoxErrorImage.DisplayMember = "(none)";
+            this.comboBoxErrorImage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxErrorImage.FormattingEnabled = true;
+            this.comboBoxErrorImage.Items.AddRange(new object[] {
+            "Prediction Error",
+            "Prediction Error Q"});
+            this.comboBoxErrorImage.Location = new System.Drawing.Point(115, 30);
+            this.comboBoxErrorImage.Name = "comboBoxErrorImage";
+            this.comboBoxErrorImage.Size = new System.Drawing.Size(150, 24);
+            this.comboBoxErrorImage.TabIndex = 21;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(6, 33);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(103, 17);
+            this.label14.TabIndex = 20;
+            this.label14.Text = "Source image :";
+            // 
+            // btnRefreshErrorImage
+            // 
+            this.btnRefreshErrorImage.Location = new System.Drawing.Point(9, 100);
+            this.btnRefreshErrorImage.Name = "btnRefreshErrorImage";
+            this.btnRefreshErrorImage.Size = new System.Drawing.Size(72, 27);
+            this.btnRefreshErrorImage.TabIndex = 19;
+            this.btnRefreshErrorImage.Text = "Refresh";
+            this.btnRefreshErrorImage.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDownErrorImageContrast
+            // 
+            this.numericUpDownErrorImageContrast.Location = new System.Drawing.Point(115, 69);
+            this.numericUpDownErrorImageContrast.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDownErrorImageContrast.Name = "numericUpDownErrorImageContrast";
+            this.numericUpDownErrorImageContrast.Size = new System.Drawing.Size(50, 22);
+            this.numericUpDownErrorImageContrast.TabIndex = 17;
+            this.numericUpDownErrorImageContrast.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(40, 71);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(69, 17);
+            this.label13.TabIndex = 18;
+            this.label13.Text = "Contrast :";
+            // 
+            // pictureBoxDecodedImage
+            // 
+            this.pictureBoxDecodedImage.BackColor = System.Drawing.SystemColors.Control;
+            this.pictureBoxDecodedImage.Location = new System.Drawing.Point(1001, 29);
+            this.pictureBoxDecodedImage.Name = "pictureBoxDecodedImage";
+            this.pictureBoxDecodedImage.Size = new System.Drawing.Size(294, 289);
+            this.pictureBoxDecodedImage.TabIndex = 16;
+            this.pictureBoxDecodedImage.TabStop = false;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(1093, 9);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(107, 17);
+            this.label15.TabIndex = 17;
+            this.label15.Text = "Decoded Image";
+            // 
+            // groupBoxDecodedImage
+            // 
+            this.groupBoxDecodedImage.Controls.Add(this.btnSaveDecodedImage);
+            this.groupBoxDecodedImage.Controls.Add(this.btnDecodeImage);
+            this.groupBoxDecodedImage.Controls.Add(this.btnLoadDecoded);
+            this.groupBoxDecodedImage.Location = new System.Drawing.Point(1001, 324);
+            this.groupBoxDecodedImage.Name = "groupBoxDecodedImage";
+            this.groupBoxDecodedImage.Size = new System.Drawing.Size(294, 167);
+            this.groupBoxDecodedImage.TabIndex = 18;
+            this.groupBoxDecodedImage.TabStop = false;
+            this.groupBoxDecodedImage.Text = "Operations";
+            // 
+            // btnSaveDecodedImage
+            // 
+            this.btnSaveDecodedImage.Location = new System.Drawing.Point(160, 69);
+            this.btnSaveDecodedImage.Name = "btnSaveDecodedImage";
+            this.btnSaveDecodedImage.Size = new System.Drawing.Size(75, 31);
+            this.btnSaveDecodedImage.TabIndex = 14;
+            this.btnSaveDecodedImage.Text = "Save";
+            this.btnSaveDecodedImage.UseVisualStyleBackColor = true;
+            // 
+            // btnDecodeImage
+            // 
+            this.btnDecodeImage.Location = new System.Drawing.Point(34, 112);
+            this.btnDecodeImage.Name = "btnDecodeImage";
+            this.btnDecodeImage.Size = new System.Drawing.Size(75, 31);
+            this.btnDecodeImage.TabIndex = 4;
+            this.btnDecodeImage.Text = "Decode";
+            this.btnDecodeImage.UseVisualStyleBackColor = true;
+            // 
+            // btnLoadDecoded
+            // 
+            this.btnLoadDecoded.Location = new System.Drawing.Point(34, 67);
+            this.btnLoadDecoded.Name = "btnLoadDecoded";
+            this.btnLoadDecoded.Size = new System.Drawing.Size(75, 31);
+            this.btnLoadDecoded.TabIndex = 3;
+            this.btnLoadDecoded.Text = "Load";
+            this.btnLoadDecoded.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ClientSize = new System.Drawing.Size(1126, 704);
+            this.ClientSize = new System.Drawing.Size(1308, 693);
+            this.Controls.Add(this.groupBoxDecodedImage);
+            this.Controls.Add(this.label15);
+            this.Controls.Add(this.pictureBoxDecodedImage);
+            this.Controls.Add(this.groupBoxErrorImage);
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.pictureBoxErrorImage);
             this.Controls.Add(this.groupBoxOriginalImage);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
@@ -410,6 +581,12 @@
             this.groupBoxErrorValueMinMax.ResumeLayout(false);
             this.groupBoxErrorValueMinMax.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownKValue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxErrorImage)).EndInit();
+            this.groupBoxErrorImage.ResumeLayout(false);
+            this.groupBoxErrorImage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownErrorImageContrast)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDecodedImage)).EndInit();
+            this.groupBoxDecodedImage.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -444,6 +621,20 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox textBoxMaxErrorValue;
         private System.Windows.Forms.TextBox textBoxMinErrorValue;
+        private System.Windows.Forms.PictureBox pictureBoxErrorImage;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.GroupBox groupBoxErrorImage;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Button btnRefreshErrorImage;
+        private System.Windows.Forms.NumericUpDown numericUpDownErrorImageContrast;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.ComboBox comboBoxErrorImage;
+        private System.Windows.Forms.PictureBox pictureBoxDecodedImage;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.GroupBox groupBoxDecodedImage;
+        private System.Windows.Forms.Button btnSaveDecodedImage;
+        private System.Windows.Forms.Button btnDecodeImage;
+        private System.Windows.Forms.Button btnLoadDecoded;
     }
 }
 
