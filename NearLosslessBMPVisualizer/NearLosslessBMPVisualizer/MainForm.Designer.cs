@@ -183,7 +183,7 @@
             "Decoded Image"});
             this.comboBoxHistogram.Location = new System.Drawing.Point(189, 28);
             this.comboBoxHistogram.Name = "comboBoxHistogram";
-            this.comboBoxHistogram.Size = new System.Drawing.Size(121, 24);
+            this.comboBoxHistogram.Size = new System.Drawing.Size(164, 24);
             this.comboBoxHistogram.TabIndex = 8;
             // 
             // label4

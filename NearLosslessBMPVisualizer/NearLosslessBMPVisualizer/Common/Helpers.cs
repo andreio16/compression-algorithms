@@ -13,6 +13,32 @@ namespace NearLosslessBMPVisualizer
         {
             return new BmpFileObject(filePath);
         }
+        
+        public static int[] CreateHistogram(int[,] matrix)
+        {
+            List<int> temp = new List<int>();
+            List<int> freq = new List<int>();
+
+            int length = (int)Math.Sqrt(matrix.Length);
+            int[] histogram = new int[2 * length];
+            Array.Clear(histogram, 0, 2 * length);
+
+            // Convert matrix to list
+            for (int i = 0; i < length; i++)
+                for (int j = 0; j < length; j++)
+                    temp.Add(matrix[i, j]);
+
+            // Count frequencies 
+            foreach (var group in temp.GroupBy(o => o))
+                freq.Add(group.Count());
+
+            // Build histogram from 2 lists + shift X axis to the right to match interval [-255:255]
+            temp = temp.Distinct().ToList();
+            for (int i = 0; i < temp.Count; i++)
+                histogram[(temp[i] + 255)] = freq[i];
+
+            return histogram;
+        }
 
         public static int[] CreateHistogram(byte[,] matrix)
         {
@@ -57,7 +83,6 @@ namespace NearLosslessBMPVisualizer
 
             if (canvas.Image != null) 
                 canvas.Image.Dispose();
-            canvas.Image = null;
             canvas.Image = temp;
 
         }

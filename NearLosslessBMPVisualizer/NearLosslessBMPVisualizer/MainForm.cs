@@ -21,12 +21,12 @@ namespace NearLosslessBMPVisualizer
         private int userKMaxReconstructionError = 1;
 
         BmpFileObject bmpObject;
+        NearLosslessEngine nlEngine;
 
         public MainForm()
         {
             InitializeComponent();
             comboBoxSaveMode.SelectedIndex  = 0;
-            comboBoxHistogram.SelectedIndex = 0;
             comboBoxPredictorSelection.SelectedIndex = 0;
         }
 
@@ -66,20 +66,32 @@ namespace NearLosslessBMPVisualizer
                 case 8: userPredictorSelection = 8; break;
                 default: userPredictorSelection = 0; break;
             }
-
-            // to be continued
+            
+            nlEngine = new NearLosslessEngine(bmpObject.GetBmpData());
+            nlEngine.CompressImage(userPredictorSelection, userKMaxReconstructionError);
+            textBoxMinErrorValue.Text = nlEngine.minValueError.ToString();
+            textBoxMaxErrorValue.Text = nlEngine.maxValueError.ToString();
+            MessageBox.Show("Image was encoded succesfully!");
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             try
             {
-                // test histogram -> [second param needs to be updated]
-                Helpers.DrawHistogram(pictureBoxHistogram, Helpers.CreateHistogram(bmpObject.GetBmpData()), (float)numericUpDownHistogramScale.Value);
+                var scale = (float)numericUpDownHistogramScale.Value;
+
+                switch (comboBoxHistogram.SelectedIndex)
+                {
+                    case 0: Helpers.DrawHistogram(pictureBoxHistogram, Helpers.CreateHistogram(nlEngine.GetOriginalImageMatrix()), scale);  break;
+                    case 1: Helpers.DrawHistogram(pictureBoxHistogram, Helpers.CreateHistogram(nlEngine.GetErrorPredictedMatrix()), scale); break;
+                    case 2: Helpers.DrawHistogram(pictureBoxHistogram, Helpers.CreateHistogram(nlEngine.GetErrorPredictedQuantizedMatrix()), scale); break;
+                    case 3: Helpers.DrawHistogram(pictureBoxHistogram, Helpers.CreateHistogram(nlEngine.GetDecodedImageMatrix()), scale);   break;
+                    default: Helpers.DrawHistogram(pictureBoxHistogram, Helpers.CreateHistogram(bmpObject.GetBmpData()), scale); break;
+                }
             }
             catch (NullReferenceException)
             {
-                MessageBox.Show("Please load an image first!");
+                MessageBox.Show("Error, you forgot to load or to encode the image!");
             }
         }
     }

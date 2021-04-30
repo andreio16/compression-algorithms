@@ -42,6 +42,26 @@ namespace NearLosslessBMPVisualizer
             }
         }
 
+        public byte[,] GetOriginalImageMatrix()
+        {
+            return originalImage;
+        }
+
+        public byte[,] GetDecodedImageMatrix()
+        {
+            return decodedImage;
+        }
+
+        public int[,] GetErrorPredictedMatrix()
+        {
+            return errorPredictedImage;
+        }
+
+        public int[,] GetErrorPredictedQuantizedMatrix()
+        {
+            return errorPredictedQuantizedImage;
+        }
+
         public void CompressImage(int inputPredictorSelection, int maxReconstructionError)
         {
             int size = (int)Math.Sqrt(originalImage.Length);
