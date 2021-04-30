@@ -17,6 +17,8 @@ namespace NearLosslessBMPVisualizer
         private int[,]  errorPredictedImage = new int[256, 256];
         private int[,]  errorPredictedQuantizedImage = new int[256, 256];
 
+
+
         public NearLosslessEngine(byte[,] originalImageMatrix)
         {
             if (originalImageMatrix.Length != originalImage.Length)
