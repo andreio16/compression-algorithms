@@ -86,6 +86,25 @@ namespace NearLosslessBMPVisualizer
             canvas.Image = temp;
 
         }
+
+        public static Bitmap BuildBitmapFromMatrix(int[,] dataMatrix, int contrastValue)
+        {
+            int size = (int)Math.Sqrt(dataMatrix.Length);
+            Bitmap image = new Bitmap(size, size);
+
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    var value = dataMatrix[i, j] * contrastValue + 128;
+                    if (value > 255) value = 255;
+                    if (value < 0) value = 0;
+                    image.SetPixel(j, size - 1 - i, Color.FromArgb(value, value, value));
+                }
+            }
+
+            return image;
+        }
     }
 
     public class BmpFileObject

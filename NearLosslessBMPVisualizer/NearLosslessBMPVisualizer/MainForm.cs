@@ -95,5 +95,25 @@ namespace NearLosslessBMPVisualizer
             }
         }
 
+        private void btnRefreshErrorImage_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var contrast = (int)numericUpDownErrorImageContrast.Value;
+
+                switch (comboBoxErrorImage.SelectedIndex)
+                {
+                    case 0: pictureBoxErrorImage.Image = Helpers.BuildBitmapFromMatrix(nlEngine.GetErrorPredictedMatrix(), contrast); break;
+                    case 1: pictureBoxErrorImage.Image = Helpers.BuildBitmapFromMatrix(nlEngine.GetErrorPredictedQuantizedMatrix(), contrast); break;
+                    default: break;
+                }
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Error, you forgot to load or to encode the image!");
+            }
+        }        
+        //-----------------------------------------------------------------------------------------------------------------------
+        //-----------------------------------------------------------------------------------------------------------------------
     }
 }

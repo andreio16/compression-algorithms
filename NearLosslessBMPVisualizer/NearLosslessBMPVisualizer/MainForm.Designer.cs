@@ -463,6 +463,7 @@
             this.btnRefreshErrorImage.TabIndex = 19;
             this.btnRefreshErrorImage.Text = "Refresh";
             this.btnRefreshErrorImage.UseVisualStyleBackColor = true;
+            this.btnRefreshErrorImage.Click += new System.EventHandler(this.btnRefreshErrorImage_Click);
             // 
             // numericUpDownErrorImageContrast
             // 
