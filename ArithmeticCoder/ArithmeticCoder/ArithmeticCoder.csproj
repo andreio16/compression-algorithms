@@ -8,6 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>ArithmeticCoder</RootNamespace>
     <AssemblyName>ArithmeticCoder</AssemblyName>
+    <Authors>Andrei Oana (github: andreio16)</Authors>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
