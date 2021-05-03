@@ -124,7 +124,7 @@ namespace NearLosslessBMPVisualizer
                 var compressedDataMatrix = nlEngine.GetErrorPredictedQuantizedMatrix();
                 var dataMatrixSize = (int)Math.Sqrt(compressedDataMatrix.Length);
 
-                var compressedFileName = Path.GetFileName(inputFilePathEncoder);
+                var compressedFileName = Path.GetFileNameWithoutExtension(inputFilePathEncoder);
                 var fileExtension  = ".k" + userKMaxReconstructionError + "p" + userPredictorSelection;
                 
 
