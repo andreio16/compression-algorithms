@@ -390,6 +390,7 @@
             this.btnSaveEncodedImage.TabIndex = 13;
             this.btnSaveEncodedImage.Text = "Save";
             this.btnSaveEncodedImage.UseVisualStyleBackColor = true;
+            this.btnSaveEncodedImage.Click += new System.EventHandler(this.btnSaveEncodedImage_Click);
             // 
             // btnEncodeOriginalImage
             // 
