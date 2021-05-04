@@ -336,7 +336,7 @@
             this.comboBoxSaveMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxSaveMode.FormattingEnabled = true;
             this.comboBoxSaveMode.Items.AddRange(new object[] {
-            "Fixed (32/16/9)",
+            "Fixed",
             "Table",
             "Arithmetic"});
             this.comboBoxSaveMode.Location = new System.Drawing.Point(156, 109);
@@ -524,7 +524,7 @@
             // 
             // btnSaveDecodedImage
             // 
-            this.btnSaveDecodedImage.Location = new System.Drawing.Point(160, 69);
+            this.btnSaveDecodedImage.Location = new System.Drawing.Point(160, 66);
             this.btnSaveDecodedImage.Name = "btnSaveDecodedImage";
             this.btnSaveDecodedImage.Size = new System.Drawing.Size(75, 31);
             this.btnSaveDecodedImage.TabIndex = 14;

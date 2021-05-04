@@ -146,6 +146,7 @@ namespace NearLosslessBMPVisualizer
                     if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
                     {
                         var compressedFilePath = fbd.SelectedPath;
+
                         switch (comboBoxSaveMode.SelectedIndex)
                         {
                             case 0: // Fixed Saving Mode (F)
@@ -154,22 +155,22 @@ namespace NearLosslessBMPVisualizer
                                     compressedFilePath += "\\" + compressedFileName + fileExtension;
 
                                     // Building the bmp compressed file format
-                                    BitWriter writer  = new BitWriter(compressedFilePath);
+                                    BitWriter writer = new BitWriter(compressedFilePath);
 
-                                    // [1] writing the specific header byte by byte
+                                    // [1-F] writing the specific header byte by byte
                                     for (int i = 0; i < headerBmpFile.Length; i++)
                                         writer.WriteNBits(headerBmpFile[i], 8);
 
-                                    // [2] writing the predictor used (on 4 bits)
+                                    // [2-F] writing the predictor used (on 4 bits)
                                     writer.WriteNBits((uint)userPredictorSelection, 4);
 
-                                    // [3] writing the k  value  used (on 4 bits)
+                                    // [3-F] writing the k  value  used (on 4 bits)
                                     writer.WriteNBits((uint)userKMaxReconstructionError, 4);
 
-                                    // [4] writing the save mode used (on 2 bits)
+                                    // [4-F] writing the save mode used (on 2 bits)
                                     writer.WriteNBits((uint)comboBoxSaveMode.SelectedIndex, 2);
 
-                                    // [5] writing bmp data matrix elements (on 9 bits each)
+                                    // [5-F] writing bmp data matrix elements (on 9 bits each)
                                     for (int i = 0; i < dataMatrixSize; i++)
                                     {
                                         for (int j = 0; j < dataMatrixSize; j++)
@@ -177,7 +178,7 @@ namespace NearLosslessBMPVisualizer
                                             writer.WriteNBits((uint)compressedDataMatrix[i, j] + 255, 9);
                                         }
                                     }
-                                    writer.WriteNBits(1, 7); // ???
+                                    writer.WriteNBits(1, 7);
                                     writer.Dispose();
                                     break;
                                 }
@@ -185,6 +186,35 @@ namespace NearLosslessBMPVisualizer
                                 {
                                     fileExtension += "T.nlp";
                                     compressedFilePath += "\\" + compressedFileName + fileExtension;
+
+                                    // Building the bmp compressed file format
+                                    BitWriter writer = new BitWriter(compressedFilePath);
+
+                                    // [1-T] writing the specific header byte by byte
+                                    for (int i = 0; i < headerBmpFile.Length; i++)
+                                        writer.WriteNBits(headerBmpFile[i], 8);
+
+                                    // [2-T] writing the predictor used (on 4 bits)
+                                    writer.WriteNBits((uint)userPredictorSelection, 4);
+
+                                    // [3-T] writing the k  value  used (on 4 bits)
+                                    writer.WriteNBits((uint)userKMaxReconstructionError, 4);
+
+                                    // [4-T] writing the save mode used (on 2 bits)
+                                    writer.WriteNBits((uint)comboBoxSaveMode.SelectedIndex, 2);
+                                    writer.Dispose();
+
+                                    // [5-T] writing bmp data matrix elements encoded with JPEG Table
+                                    for (int i = 0; i < dataMatrixSize; i++)
+                                    {
+                                        for (int j = 0; j < dataMatrixSize; j++) 
+                                        {
+                                            Helpers.WriteValueUsingJPEGTable(compressedFilePath, compressedDataMatrix[i, j]);
+                                        }
+                                    }
+                                    writer = new BitWriter(compressedFilePath);
+                                    writer.WriteNBits(1, 7);
+                                    writer.Dispose();
                                     break;
                                 }
                             case 2: // Arithmetic Saving Mode (Entropic Coder) (A)

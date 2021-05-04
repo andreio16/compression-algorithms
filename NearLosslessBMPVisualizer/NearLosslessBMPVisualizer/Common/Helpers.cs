@@ -130,8 +130,28 @@ namespace NearLosslessBMPVisualizer
         {
             return new BmpFileObject(filePath, ref kReconstructError, ref selectedPredictor, ref saveMode);
         }
-        
 
+        public static void WriteValueUsingJPEGTable(string filePath, int value)
+        {
+            BitWriter writer = new BitWriter(filePath);
+
+            if (value == 0)
+            {
+                writer.WriteNBits(0, 1);
+            }
+            else
+            {
+                var lineNumber = (int)(Math.Log(Math.Abs(value), 2) + 1);
+                writer.WriteNBits(1, lineNumber);
+                writer.WriteNBits(0, 1);
+
+                var index = value;
+                if (index < 0)
+                    index += (int)Math.Pow(2, lineNumber) - 1;
+                writer.WriteNBits((uint)index, lineNumber);
+            }
+            writer.Dispose();
+        }
     }
 
     public class BmpFileObject
