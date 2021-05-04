@@ -91,7 +91,12 @@ namespace NearLosslessBMPVisualizer
                     case 1: Helpers.DrawHistogram(pictureBoxHistogram, Helpers.CreateHistogram(nlEngine.GetErrorPredictedMatrix()), scale); break;
                     case 2: Helpers.DrawHistogram(pictureBoxHistogram, Helpers.CreateHistogram(nlEngine.GetErrorPredictedQuantizedMatrix()), scale); break;
                     case 3: Helpers.DrawHistogram(pictureBoxHistogram, Helpers.CreateHistogram(nlEngine.GetDecodedImageMatrix()), scale);   break;
-                    default: Helpers.DrawHistogram(pictureBoxHistogram, Helpers.CreateHistogram(bmpObject.GetBmpData()), scale); break;
+                    default:
+                        if (bmpObject.GetBmpData() != null && bmpObject.GetBmpDataEncoded() == null)
+                            Helpers.DrawHistogram(pictureBoxHistogram, Helpers.CreateHistogram(bmpObject.GetBmpData()), scale);
+                        if (bmpObject.GetBmpDataEncoded() != null && bmpObject.GetBmpData() == null)
+                            Helpers.DrawHistogram(pictureBoxHistogram, Helpers.CreateHistogram(bmpObject.GetBmpDataEncoded()), scale);
+                        break;
                 }
             }
             catch (NullReferenceException)
@@ -232,7 +237,55 @@ namespace NearLosslessBMPVisualizer
 
             MessageBox.Show("Image was decoded succesfully!");
             label15.Text = "Decoded Image";
-            
+        }
+
+        private void btnSaveDecodedImage_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var fileExtension = ".bmp";
+                var headerBmpFile = bmpObject.GetBmpHeader();
+                var compressedDataMatrix = nlEngine.GetDecodedImageMatrix();
+                var dataMatrixSize = (int)Math.Sqrt(compressedDataMatrix.Length);
+
+                var decompressedFileName = Path.GetFileNameWithoutExtension(inputFilePathDecoder);
+                
+                if (String.IsNullOrEmpty(decompressedFileName)) throw new NullReferenceException();
+
+                using (var fbd = new FolderBrowserDialog())
+                {
+                    var result = fbd.ShowDialog();
+                    if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                    {
+                        var decompressedFilePath = fbd.SelectedPath;
+                        
+                        decompressedFilePath += "\\" + decompressedFileName + fileExtension;
+
+                        // Building the bmp file format
+                        BitWriter writer = new BitWriter(decompressedFilePath);
+
+                        // [1] writing the specific header byte by byte
+                        for (int i = 0; i < headerBmpFile.Length; i++)
+                            writer.WriteNBits(headerBmpFile[i], 8);
+
+                        // [2] writing bmp data matrix elements (on 9 bits each)
+                        for (int i = 0; i < dataMatrixSize; i++)
+                        {
+                            for (int j = 0; j < dataMatrixSize; j++)
+                            {
+                                writer.WriteNBits((uint)compressedDataMatrix[i, j], 8);
+                            }
+                        }
+                        writer.WriteNBits(1, 7);
+                        writer.Dispose();
+                    }
+                }
+                MessageBox.Show("Decoded image succesfully saved!");
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Warning: You forgot to load/decode the image before saving.");
+            }
         }
 
         //-----------------------------------------------------------------------------------------------------------------------

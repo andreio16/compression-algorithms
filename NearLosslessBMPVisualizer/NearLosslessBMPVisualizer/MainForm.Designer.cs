@@ -530,6 +530,7 @@
             this.btnSaveDecodedImage.TabIndex = 14;
             this.btnSaveDecodedImage.Text = "Save";
             this.btnSaveDecodedImage.UseVisualStyleBackColor = true;
+            this.btnSaveDecodedImage.Click += new System.EventHandler(this.btnSaveDecodedImage_Click);
             // 
             // btnDecodeImage
             // 
