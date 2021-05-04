@@ -146,7 +146,55 @@ namespace NearLosslessBMPVisualizer
 
 
 
+        // to be continued... ctor (int[,] mmatr)
+        public NearLosslessEngine(int[,] quantizedImageMatrix)
+        {
 
-        
+            if (quantizedImageMatrix.Length != errorPredictedQuantizedImage.Length)
+            {
+                throw new InvalidOperationException("Image matrix must be of size 256x256!");
+            }
+            else
+            {
+                int size = (int)Math.Sqrt(quantizedImageMatrix.Length);
+                for (int i = 0; i < size; i++)
+                {
+                    for (int j = 0; j < size; j++)
+                    {
+                        decodedImage[i, j]  = 0;
+                        originalImage[i, j] = 0;
+                        predictedImage[i, j] = 0;
+                        errorPredictedImage[i, j] = 0;
+                        errorPredictedQuantizedImage[i, j] = quantizedImageMatrix[i,j];
+                    }
+                }
+            }
+        }
+
+        public void DecompressImage(int inputPredictorSelection, int maxReconstructionError, int saveMode)
+        {
+            int size = (int)Math.Sqrt(errorPredictedQuantizedImage.Length);
+            switch (saveMode)
+            {
+                case 0:
+                    {
+                        for (int i = 0; i < size; i++)
+                        {
+                            for (int j = 0; j < size; j++)
+                            {
+                                {
+                                    predictedImage[i, j] = PredictFromDecodedImageBasedOnSelection(i, j, inputPredictorSelection);
+                                    var temp = predictedImage[i, j] + errorPredictedQuantizedImage[i, j] * (2 * maxReconstructionError + 1);
+                                    if (temp > 255) temp = 255;
+                                    if (temp < 0) temp = 0;
+                                    decodedImage[i, j] = (byte)temp;
+                                }
+                            }
+                        }
+                        break;
+                    }
+                default:break;
+            }
+        }
     }
 }

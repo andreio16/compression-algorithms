@@ -13,17 +13,20 @@ namespace NearLosslessBMPVisualizer
 {
     public partial class MainForm : Form
     {
+        private bool   isFileEncoded = false;
         private string inputFilePathEncoder  = @"";
         private string inputFilePathDecoder  = @"";
 
-        private bool isFileEncoded = false;
 
+        private int decodingK  = 0;
+        private int decodingP  = 0;
+        private int decodingSM = 0;
         private int userPredictorSelection = 0;
         private int userKMaxReconstructionError = 1;
 
         private BmpFileObject bmpObject;
         private NearLosslessEngine nlEngine;
-
+        
         public MainForm()
         {
             InitializeComponent();
@@ -32,7 +35,7 @@ namespace NearLosslessBMPVisualizer
         }
 
         //-----------------------------------------------------------------------------------------------------------------------
-        //  Form Designer Methods
+        //  Form Designer Methods -- ENCODER
         //-----------------------------------------------------------------------------------------------------------------------
         private void btnLoadBMP_Click(object sender, EventArgs e)
         {
@@ -107,7 +110,7 @@ namespace NearLosslessBMPVisualizer
                 {
                     case 0: pictureBoxErrorImage.Image = Helpers.BuildBitmapFromMatrix(nlEngine.GetErrorPredictedMatrix(), contrast); break;
                     case 1: pictureBoxErrorImage.Image = Helpers.BuildBitmapFromMatrix(nlEngine.GetErrorPredictedQuantizedMatrix(), contrast); break;
-                    default: break;
+                    default: pictureBoxErrorImage.Image = Helpers.BuildBitmapFromMatrix(nlEngine.GetDecodedImageMatrix()); break;
                 }
             }
             catch (NullReferenceException)
@@ -166,9 +169,11 @@ namespace NearLosslessBMPVisualizer
                                     {
                                         for (int j = 0; j < dataMatrixSize; j++)
                                         {
-                                            writer.WriteNBits((uint)(compressedDataMatrix[i, j] + 255), 9);
+                                            writer.WriteNBits((uint)compressedDataMatrix[i, j] + 255, 9);
                                         }
                                     }
+                                    writer.WriteNBits(1, 7); // ???
+                                    writer.Dispose();
                                     break;
                                 }
                             case 1: // Jpeg Table Saving Mode (T)
@@ -195,6 +200,41 @@ namespace NearLosslessBMPVisualizer
                 MessageBox.Show("Warning: You forgot to load/encode the image. (Other causes: encoding settings are changed)");
             }
         }
+
+        //-----------------------------------------------------------------------------------------------------------------------
+        //  Form Designer Methods -- DECODER
+        //-----------------------------------------------------------------------------------------------------------------------
+
+        private void btnLoadDecoded_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "NearLosslesPredictor (*nlp)|*.nlp";
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                label15.Text = "Encoded Image";
+                inputFilePathDecoder = ofd.FileName;
+                bmpObject = Helpers.ReadEncodedBmpFormat(inputFilePathDecoder, ref decodingK, ref decodingP, ref decodingSM);
+
+                // encoded  data/ header/ k/ p/ sm/  -> global 
+
+                Helpers.DrawHistogram(pictureBoxHistogram, Helpers.CreateHistogram(bmpObject.GetBmpDataEncoded()), (float)numericUpDownHistogramScale.Value);
+            }
+        }
+
+        private void btnDecodeImage_Click(object sender, EventArgs e)
+        {
+            nlEngine = new NearLosslessEngine(bmpObject.GetBmpDataEncoded());
+
+            nlEngine.DecompressImage(decodingP, decodingK, decodingSM);
+
+            pictureBoxDecodedImage.Image = Helpers.BuildBitmapFromMatrix(nlEngine.GetDecodedImageMatrix());
+
+            MessageBox.Show("Image was decoded succesfully!");
+            label15.Text = "Decoded Image";
+            
+        }
+
         //-----------------------------------------------------------------------------------------------------------------------
         //-----------------------------------------------------------------------------------------------------------------------
     }

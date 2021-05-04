@@ -539,6 +539,7 @@
             this.btnDecodeImage.TabIndex = 4;
             this.btnDecodeImage.Text = "Decode";
             this.btnDecodeImage.UseVisualStyleBackColor = true;
+            this.btnDecodeImage.Click += new System.EventHandler(this.btnDecodeImage_Click);
             // 
             // btnLoadDecoded
             // 
@@ -548,6 +549,7 @@
             this.btnLoadDecoded.TabIndex = 3;
             this.btnLoadDecoded.Text = "Load";
             this.btnLoadDecoded.UseVisualStyleBackColor = true;
+            this.btnLoadDecoded.Click += new System.EventHandler(this.btnLoadDecoded_Click);
             // 
             // MainForm
             // 

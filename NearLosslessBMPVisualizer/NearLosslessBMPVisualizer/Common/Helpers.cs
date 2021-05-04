@@ -9,11 +9,6 @@ namespace NearLosslessBMPVisualizer
 
     public static class Helpers
     {
-        public static BmpFileObject ReadBmpFormat(string filePath)
-        {
-            return new BmpFileObject(filePath);
-        }
-        
         public static int[] CreateHistogram(int[,] matrix)
         {
             List<int> temp = new List<int>();
@@ -66,25 +61,29 @@ namespace NearLosslessBMPVisualizer
             return histogram;
         }
 
-        public static void DrawHistogram(PictureBox canvas, int[] histogram, float scale)
+        public static BmpFileObject ReadBmpFormat(string filePath)
         {
-            Bitmap temp = new Bitmap(histogram.Length, canvas.Size.Height); //  histogram.Length  (int)(canvas.Size.Height * 0.2)
+            return new BmpFileObject(filePath);
+        }
 
-            for (int i = 0; i < histogram.Length; i++)
+        public static Bitmap BuildBitmapFromMatrix(byte[,] dataMatrix)
+        {
+
+            int size = (int)Math.Sqrt(dataMatrix.Length);
+            Bitmap image = new Bitmap(size, size);
+
+            for (int i = 0; i < size; i++)
             {
-                int start = (int)(canvas.Size.Height - histogram[i] * scale);
-                if (start < 0) start = 0;
-                if (start > canvas.Size.Height) start = canvas.Size.Height;
-                for (int point = start; point < canvas.Size.Height; point++)
+                for (int j = 0; j < size; j++)
                 {
-                    temp.SetPixel(i, point, Color.Gray);
+                    var value = dataMatrix[i, j];
+                    if (value > 255) value = 255;
+                    if (value < 0) value = 0;
+                    image.SetPixel(j, size - 1 - i, Color.FromArgb(value, value, value));
                 }
             }
 
-            if (canvas.Image != null) 
-                canvas.Image.Dispose();
-            canvas.Image = temp;
-
+            return image;
         }
 
         public static Bitmap BuildBitmapFromMatrix(int[,] dataMatrix, int contrastValue)
@@ -105,16 +104,47 @@ namespace NearLosslessBMPVisualizer
 
             return image;
         }
+
+        public static void DrawHistogram(PictureBox canvas, int[] histogram, float scale)
+        {
+            Bitmap temp = new Bitmap(histogram.Length, canvas.Size.Height); //  histogram.Length  (int)(canvas.Size.Height * 0.2)
+
+            for (int i = 0; i < histogram.Length; i++)
+            {
+                int start = (int)(canvas.Size.Height - histogram[i] * scale);
+                if (start < 0) start = 0;
+                if (start > canvas.Size.Height) start = canvas.Size.Height;
+                for (int point = start; point < canvas.Size.Height; point++)
+                {
+                    temp.SetPixel(i, point, Color.Gray);
+                }
+            }
+
+            if (canvas.Image != null) 
+                canvas.Image.Dispose();
+            canvas.Image = temp;
+
+        }
+        
+        public static BmpFileObject ReadEncodedBmpFormat(string filePath, ref int kReconstructError, ref int selectedPredictor, ref int saveMode)
+        {
+            return new BmpFileObject(filePath, ref kReconstructError, ref selectedPredictor, ref saveMode);
+        }
+        
+
     }
 
     public class BmpFileObject
     {
-        private byte[,] _dataContainer = new byte[256, 256];
-        private byte[] _headerContainer = new byte[1078];
-        private Bitmap _image = new Bitmap(256, 256);
+        private Bitmap  _image;
+        private byte[,] _dataContainer;
+        private  int[,] _dataContainerEncoded;
+        private byte[]  _headerContainer = new byte[1078];
 
         public BmpFileObject(string filePath)
         {
+            _image = new Bitmap(256, 256);
+            _dataContainer = new byte[256, 256];
             BitReader reader = new BitReader(filePath);
 
             for (int i = 0; i < _headerContainer.Length; i++)
@@ -132,9 +162,9 @@ namespace NearLosslessBMPVisualizer
             reader.Dispose();
         }
 
-        public byte[,] GetBmpData()
+        public Bitmap GetBmpImage()
         {
-            return _dataContainer;
+            return _image;
         }
 
         public byte[] GetBmpHeader()
@@ -142,9 +172,39 @@ namespace NearLosslessBMPVisualizer
             return _headerContainer;
         }
 
-        public Bitmap GetBmpImage()
+        public byte[,] GetBmpData()
         {
-            return _image;
+            return _dataContainer;
         }
+        
+        public int[,] GetBmpDataEncoded()
+        {
+            return _dataContainerEncoded;
+        }
+
+        public BmpFileObject(string filePath, ref int kReconstructError, ref int selectedPredictor, ref int saveMode)
+        {
+            _dataContainerEncoded = new int[256, 256];
+            BitReader reader = new BitReader(filePath);
+
+            for (int i = 0; i < _headerContainer.Length; i++)
+                _headerContainer[i] = (byte)reader.ReadNBits(8);
+
+            selectedPredictor = (int)reader.ReadNBits(4);
+            kReconstructError = (int)reader.ReadNBits(4);
+            saveMode = (int)reader.ReadNBits(2);
+
+            for (int i = 0; i < 256; i++)
+            {
+                for (int j = 0; j < 256; j++)
+                {
+                    _dataContainerEncoded[i, j] = (int)reader.ReadNBits(9) - 255;
+                }
+            }
+
+            reader.Dispose();
+        }
+
     }
+
 }
