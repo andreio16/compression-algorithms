@@ -59,7 +59,7 @@
             // textBoxInputPath
             // 
             this.textBoxInputPath.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.textBoxInputPath.Location = new System.Drawing.Point(75, 65);
+            this.textBoxInputPath.Location = new System.Drawing.Point(75, 43);
             this.textBoxInputPath.Name = "textBoxInputPath";
             this.textBoxInputPath.Size = new System.Drawing.Size(361, 22);
             this.textBoxInputPath.TabIndex = 2;
@@ -67,7 +67,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(31, 68);
+            this.label2.Location = new System.Drawing.Point(31, 46);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(38, 17);
             this.label2.TabIndex = 3;
@@ -75,7 +75,7 @@
             // 
             // btnBrowseFile
             // 
-            this.btnBrowseFile.Location = new System.Drawing.Point(463, 62);
+            this.btnBrowseFile.Location = new System.Drawing.Point(463, 40);
             this.btnBrowseFile.Name = "btnBrowseFile";
             this.btnBrowseFile.Size = new System.Drawing.Size(117, 29);
             this.btnBrowseFile.TabIndex = 4;
