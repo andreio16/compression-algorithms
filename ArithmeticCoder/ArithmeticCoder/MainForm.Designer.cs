@@ -40,7 +40,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(31, 135);
+            this.label1.Location = new System.Drawing.Point(31, 100);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(59, 17);
             this.label1.TabIndex = 0;
@@ -49,7 +49,7 @@
             // textBoxOutput
             // 
             this.textBoxOutput.BackColor = System.Drawing.SystemColors.Control;
-            this.textBoxOutput.Location = new System.Drawing.Point(34, 155);
+            this.textBoxOutput.Location = new System.Drawing.Point(34, 120);
             this.textBoxOutput.Multiline = true;
             this.textBoxOutput.Name = "textBoxOutput";
             this.textBoxOutput.ReadOnly = true;
@@ -85,7 +85,7 @@
             // 
             // btnCompress
             // 
-            this.btnCompress.Location = new System.Drawing.Point(295, 347);
+            this.btnCompress.Location = new System.Drawing.Point(319, 250);
             this.btnCompress.Name = "btnCompress";
             this.btnCompress.Size = new System.Drawing.Size(117, 29);
             this.btnCompress.TabIndex = 5;
@@ -95,7 +95,7 @@
             // 
             // btnDecompress
             // 
-            this.btnDecompress.Location = new System.Drawing.Point(463, 347);
+            this.btnDecompress.Location = new System.Drawing.Point(463, 250);
             this.btnDecompress.Name = "btnDecompress";
             this.btnDecompress.Size = new System.Drawing.Size(117, 29);
             this.btnDecompress.TabIndex = 6;
@@ -107,7 +107,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(609, 400);
+            this.ClientSize = new System.Drawing.Size(616, 306);
             this.Controls.Add(this.btnDecompress);
             this.Controls.Add(this.btnCompress);
             this.Controls.Add(this.btnBrowseFile);
