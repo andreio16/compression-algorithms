@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NearLosslessBMPVisualizer
 {
@@ -36,6 +32,30 @@ namespace NearLosslessBMPVisualizer
                         errorPredictedImage[i, j] = 0;
                         errorPredictedQuantizedImage[i, j] = 0;
                         originalImage[i, j] = originalImageMatrix[i, j];
+                    }
+                }
+            }
+        }
+
+        public NearLosslessEngine(int[,] quantizedImageMatrix)
+        {
+
+            if (quantizedImageMatrix.Length != errorPredictedQuantizedImage.Length)
+            {
+                throw new InvalidOperationException("Image matrix must be of size 256x256!");
+            }
+            else
+            {
+                int size = (int)Math.Sqrt(quantizedImageMatrix.Length);
+                for (int i = 0; i < size; i++)
+                {
+                    for (int j = 0; j < size; j++)
+                    {
+                        decodedImage[i, j] = 0;
+                        originalImage[i, j] = 0;
+                        predictedImage[i, j] = 0;
+                        errorPredictedImage[i, j] = 0;
+                        errorPredictedQuantizedImage[i, j] = quantizedImageMatrix[i, j];
                     }
                 }
             }
@@ -83,7 +103,25 @@ namespace NearLosslessBMPVisualizer
                 }
             }
         }
-        
+
+        public void DecompressImage(int inputPredictorSelection, int maxReconstructionError)
+        {
+            int size = (int)Math.Sqrt(errorPredictedQuantizedImage.Length);
+
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    predictedImage[i, j] = PredictFromDecodedImageBasedOnSelection(i, j, inputPredictorSelection);
+                    var temp = predictedImage[i, j] + errorPredictedQuantizedImage[i, j] * (2 * maxReconstructionError + 1);
+                    if (temp > 255) temp = 255;
+                    if (temp < 0) temp = 0;
+                    decodedImage[i, j] = (byte)temp;
+
+                }
+            }
+        }
+
         private byte PredictFromDecodedImageBasedOnSelection(int i, int j, int predictorSelection)
         {
             if (i == 0 && j == 0) return 128;
@@ -144,49 +182,5 @@ namespace NearLosslessBMPVisualizer
             return 128;
         }
 
-
-
-        // to be continued... ctor (int[,] mmatr)
-        public NearLosslessEngine(int[,] quantizedImageMatrix)
-        {
-
-            if (quantizedImageMatrix.Length != errorPredictedQuantizedImage.Length)
-            {
-                throw new InvalidOperationException("Image matrix must be of size 256x256!");
-            }
-            else
-            {
-                int size = (int)Math.Sqrt(quantizedImageMatrix.Length);
-                for (int i = 0; i < size; i++)
-                {
-                    for (int j = 0; j < size; j++)
-                    {
-                        decodedImage[i, j]  = 0;
-                        originalImage[i, j] = 0;
-                        predictedImage[i, j] = 0;
-                        errorPredictedImage[i, j] = 0;
-                        errorPredictedQuantizedImage[i, j] = quantizedImageMatrix[i,j];
-                    }
-                }
-            }
-        }
-
-        public void DecompressImage(int inputPredictorSelection, int maxReconstructionError)
-        {
-            int size = (int)Math.Sqrt(errorPredictedQuantizedImage.Length);
-
-            for (int i = 0; i < size; i++)
-            {
-                for (int j = 0; j < size; j++)
-                {
-                    predictedImage[i, j] = PredictFromDecodedImageBasedOnSelection(i, j, inputPredictorSelection);
-                    var temp = predictedImage[i, j] + errorPredictedQuantizedImage[i, j] * (2 * maxReconstructionError + 1);
-                    if (temp > 255) temp = 255;
-                    if (temp < 0) temp = 0;
-                    decodedImage[i, j] = (byte)temp;
-
-                }
-            }
-        }
     }
 }

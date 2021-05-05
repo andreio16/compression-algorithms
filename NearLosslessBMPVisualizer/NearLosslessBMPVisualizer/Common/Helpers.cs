@@ -172,7 +172,6 @@ namespace NearLosslessBMPVisualizer
                     lineNr++;
                     columnNr = 0;
                 }
-
             }
             return result;
         }
@@ -287,8 +286,7 @@ namespace NearLosslessBMPVisualizer
                     }
                 default: break;
             }
-
-
+            
             reader.Dispose();
         }
 
