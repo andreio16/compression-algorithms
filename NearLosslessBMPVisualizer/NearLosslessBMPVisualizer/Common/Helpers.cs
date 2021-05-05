@@ -131,10 +131,8 @@ namespace NearLosslessBMPVisualizer
             return new BmpFileObject(filePath, ref kReconstructError, ref selectedPredictor, ref saveMode);
         }
 
-        public static void WriteValueUsingJPEGTable(string filePath, int value)
+        public static void WriteValueUsingJPEGTable(BitWriter writer, int value)
         {
-            BitWriter writer = new BitWriter(filePath);
-
             if (value == 0)
             {
                 writer.WriteNBits(0, 1);
@@ -142,15 +140,15 @@ namespace NearLosslessBMPVisualizer
             else
             {
                 var lineNumber = (int)(Math.Log(Math.Abs(value), 2) + 1);
-                writer.WriteNBits(1, lineNumber);
+                for (int i = 0; i < lineNumber; i++)
+                    writer.WriteNBits(1, 1);
                 writer.WriteNBits(0, 1);
 
                 var index = value;
                 if (index < 0)
-                    index += (int)Math.Pow(2, lineNumber) - 1;
+                    index += (1 << lineNumber) - 1;
                 writer.WriteNBits((uint)index, lineNumber);
             }
-            writer.Dispose();
         }
     }
 
@@ -214,13 +212,54 @@ namespace NearLosslessBMPVisualizer
             kReconstructError = (int)reader.ReadNBits(4);
             saveMode = (int)reader.ReadNBits(2);
 
-            for (int i = 0; i < 256; i++)
+            switch (saveMode)
             {
-                for (int j = 0; j < 256; j++)
-                {
-                    _dataContainerEncoded[i, j] = (int)reader.ReadNBits(9) - 255;
-                }
+                case 0:
+                    {
+                        for (int i = 0; i < 256; i++)
+                        {
+                            for (int j = 0; j < 256; j++)
+                            {
+                                _dataContainerEncoded[i, j] = (int)reader.ReadNBits(9) - 255;
+                            }
+                        }
+                        break;
+                    }
+                case 1:
+                    {
+                        for (int i = 0; i < 256; i++)
+                        {
+                            for (int j = 0; j < 256; j++)
+                            {
+                                var index = 0;
+                                var lineNumber = 0;
+
+                                while (reader.ReadNBits(1) == 1)
+                                    lineNumber++;
+
+                                if (lineNumber == 0)
+                                {
+                                    _dataContainerEncoded[i, j] = 0;
+                                }
+                                else
+                                {
+                                    index = (int)reader.ReadNBits(lineNumber);
+                                    if (index >= (1 << (lineNumber - 1)))   
+                                        _dataContainerEncoded[i, j] = index;
+                                    else
+                                        _dataContainerEncoded[i, j] = index - (1 << lineNumber) + 1;
+                                }
+                            }
+                        }
+                        break;
+                    }
+                case 2:
+                    {
+                        break;
+                    }
+                default: break;
             }
+
 
             reader.Dispose();
         }

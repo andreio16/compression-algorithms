@@ -171,42 +171,24 @@ namespace NearLosslessBMPVisualizer
             }
         }
 
-        public void DecompressImage(int inputPredictorSelection, int maxReconstructionError, int saveMode)
+        public void DecompressImage(int inputPredictorSelection, int maxReconstructionError)
         {
             int size = (int)Math.Sqrt(errorPredictedQuantizedImage.Length);
-            switch (saveMode)
+
+            for (int i = 0; i < size; i++)
             {
-                case 0:
-                    {
-                        for (int i = 0; i < size; i++)
-                        {
-                            for (int j = 0; j < size; j++)
-                            {
-                                predictedImage[i, j] = PredictFromDecodedImageBasedOnSelection(i, j, inputPredictorSelection);
-                                var temp = predictedImage[i, j] + errorPredictedQuantizedImage[i, j] * (2 * maxReconstructionError + 1);
-                                if (temp > 255) temp = 255;
-                                if (temp < 0) temp = 0;
-                                decodedImage[i, j] = (byte)temp;
+                for (int j = 0; j < size; j++)
+                {
+                    predictedImage[i, j] = PredictFromDecodedImageBasedOnSelection(i, j, inputPredictorSelection);
+                    var temp = predictedImage[i, j] + errorPredictedQuantizedImage[i, j] * (2 * maxReconstructionError + 1);
+                    if (temp > 255) temp = 255;
+                    if (temp < 0) temp = 0;
+                    decodedImage[i, j] = (byte)temp;
 
-                            }
-                        }
-                        break;
-                    }
-                case 1:
-                    {
-                        for (int i = 0; i < size; i++)
-                        {
-                            for (int j = 0; j < size; j++)
-                            {
-                                predictedImage[i, j] = PredictFromDecodedImageBasedOnSelection(i, j, inputPredictorSelection);
-                                // build quantized based of 1 and 0 written.... problem
-                            }
-                        }
-
-                        break;
-                    }
-                default:break;
+                }
             }
+
+            // -- am eliminat switch-ul
         }
     }
 }

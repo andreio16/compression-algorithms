@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NearLosslessBMPVisualizer
 {
-    class BitWriter : IDisposable
+    public class BitWriter : IDisposable
     {
         private FileStream outputFile;
         private int writeBitsCounter = 0;

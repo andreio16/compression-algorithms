@@ -1,3 +1,3 @@
 # Compression Algorithms
 - Arithmetic Coding with integer representation
-- Near-lossless compression for bmp images
+- Near-lossless compression for bmp images (without palette color)

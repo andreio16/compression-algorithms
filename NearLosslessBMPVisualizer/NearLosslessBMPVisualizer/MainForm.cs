@@ -202,17 +202,15 @@ namespace NearLosslessBMPVisualizer
 
                                     // [4-T] writing the save mode used (on 2 bits)
                                     writer.WriteNBits((uint)comboBoxSaveMode.SelectedIndex, 2);
-                                    writer.Dispose();
-
+                                    
                                     // [5-T] writing bmp data matrix elements encoded with JPEG Table
                                     for (int i = 0; i < dataMatrixSize; i++)
                                     {
                                         for (int j = 0; j < dataMatrixSize; j++) 
                                         {
-                                            Helpers.WriteValueUsingJPEGTable(compressedFilePath, compressedDataMatrix[i, j]);
+                                            Helpers.WriteValueUsingJPEGTable(writer, compressedDataMatrix[i, j]);
                                         }
                                     }
-                                    writer = new BitWriter(compressedFilePath);
                                     writer.WriteNBits(1, 7);
                                     writer.Dispose();
                                     break;
@@ -261,7 +259,7 @@ namespace NearLosslessBMPVisualizer
         {
             nlEngine = new NearLosslessEngine(bmpObject.GetBmpDataEncoded());
 
-            nlEngine.DecompressImage(decodingP, decodingK, decodingSM);
+            nlEngine.DecompressImage(decodingP, decodingK);
 
             pictureBoxDecodedImage.Image = Helpers.BuildBitmapFromMatrix(nlEngine.GetDecodedImageMatrix());
 
