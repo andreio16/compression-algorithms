@@ -187,8 +187,6 @@ namespace NearLosslessBMPVisualizer
 
                 }
             }
-
-            // -- am eliminat switch-ul
         }
     }
 }

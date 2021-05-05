@@ -48,6 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessLogic\ArithmeticCoder.cs" />
+    <Compile Include="BusinessLogic\ArithmeticDecoder.cs" />
+    <Compile Include="BusinessLogic\ArithmeticModel.cs" />
     <Compile Include="BusinessLogic\NLCore.cs" />
     <Compile Include="Common\Helpers.cs" />
     <Compile Include="MainForm.cs">

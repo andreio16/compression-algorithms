@@ -126,9 +126,9 @@ namespace NearLosslessBMPVisualizer
 
         }
         
-        public static BmpFileObject ReadEncodedBmpFormat(string filePath, ref int kReconstructError, ref int selectedPredictor, ref int saveMode)
+        public static BmpFileObject ReadEncodedBmpFormat(string filePath, ref int kReconstructError, ref int selectedPredictor)
         {
-            return new BmpFileObject(filePath, ref kReconstructError, ref selectedPredictor, ref saveMode);
+            return new BmpFileObject(filePath, ref kReconstructError, ref selectedPredictor);
         }
 
         public static void WriteValueUsingJPEGTable(BitWriter writer, int value)
@@ -150,6 +150,32 @@ namespace NearLosslessBMPVisualizer
                 writer.WriteNBits((uint)index, lineNumber);
             }
         }
+
+        public static int[,] SubstactValueForEachElement(List<uint> dataList, int value)
+        {
+            int size = (int)Math.Sqrt(dataList.Count);
+            int[,] result = new int[size, size];
+
+            int lineNr = 0;
+            int columnNr  = 0;
+
+            result[lineNr, columnNr] = (int)dataList[0] - value;
+
+            for (int i = 1; i < dataList.Count; i++)
+            {
+                result[lineNr, columnNr] = (int)dataList[i] - value;
+
+                columnNr++;
+
+                if (i % size == 0) 
+                {
+                    lineNr++;
+                    columnNr = 0;
+                }
+
+            }
+            return result;
+        }
     }
 
     public class BmpFileObject
@@ -158,6 +184,26 @@ namespace NearLosslessBMPVisualizer
         private byte[,] _dataContainer;
         private  int[,] _dataContainerEncoded;
         private byte[]  _headerContainer = new byte[1078];
+
+        public Bitmap GetBmpImage()
+        {
+            return _image;
+        }
+
+        public byte[] GetBmpHeader()
+        {
+            return _headerContainer;
+        }
+
+        public byte[,] GetBmpData()
+        {
+            return _dataContainer;
+        }
+        
+        public int[,] GetBmpDataEncoded()
+        {
+            return _dataContainerEncoded;
+        }
 
         public BmpFileObject(string filePath)
         {
@@ -180,27 +226,7 @@ namespace NearLosslessBMPVisualizer
             reader.Dispose();
         }
 
-        public Bitmap GetBmpImage()
-        {
-            return _image;
-        }
-
-        public byte[] GetBmpHeader()
-        {
-            return _headerContainer;
-        }
-
-        public byte[,] GetBmpData()
-        {
-            return _dataContainer;
-        }
-        
-        public int[,] GetBmpDataEncoded()
-        {
-            return _dataContainerEncoded;
-        }
-
-        public BmpFileObject(string filePath, ref int kReconstructError, ref int selectedPredictor, ref int saveMode)
+        public BmpFileObject(string filePath, ref int kReconstructError, ref int selectedPredictor)
         {
             _dataContainerEncoded = new int[256, 256];
             BitReader reader = new BitReader(filePath);
@@ -210,7 +236,7 @@ namespace NearLosslessBMPVisualizer
 
             selectedPredictor = (int)reader.ReadNBits(4);
             kReconstructError = (int)reader.ReadNBits(4);
-            saveMode = (int)reader.ReadNBits(2);
+            var saveMode = (int)reader.ReadNBits(2);
 
             switch (saveMode)
             {
@@ -255,6 +281,8 @@ namespace NearLosslessBMPVisualizer
                     }
                 case 2:
                     {
+                        var uintDecodedValuesList = ArithmeticDecoder.DecompressData(reader);
+                        _dataContainerEncoded = Helpers.SubstactValueForEachElement(uintDecodedValuesList, 255);
                         break;
                     }
                 default: break;

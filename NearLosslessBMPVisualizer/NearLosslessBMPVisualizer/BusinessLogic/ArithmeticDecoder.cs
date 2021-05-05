@@ -1,12 +1,12 @@
 ﻿using System;
-using System.IO;
+using System.Collections.Generic;
 
 namespace NearLosslessBMPVisualizer
 {
-    class Decoder
+    class ArithmeticDecoder
     {
         private BitReader reader;
-        private Model arithmeticModel;
+        private ArithmeticModel arithmeticModel;
 
         private UInt64 Range;
         private UInt32 Code = 0;
@@ -17,13 +17,13 @@ namespace NearLosslessBMPVisualizer
         private readonly UInt32 firstShiftingMask   = 0x80000000;
         private readonly UInt32 secondShiftingMask  = 0xC0000000;
 
-        private const int EOF = 256, TOTAL_SYMBOLS = 257;
+        private const int EOF = 512, TOTAL_SYMBOLS = 513;
 
-        public Decoder(BitReader reader)
+        public ArithmeticDecoder(BitReader reader)
         {
             this.reader = reader;
             Code = reader.ReadNBits(32);
-            arithmeticModel = new Model(TOTAL_SYMBOLS);
+            arithmeticModel = new ArithmeticModel(TOTAL_SYMBOLS);
         }
 
         private uint DecodeSymbol()
@@ -59,26 +59,20 @@ namespace NearLosslessBMPVisualizer
 
         }
 
-        public static void DecompressFile(string inputFile, string outputFile)
+        public static List<uint> DecompressData(BitReader reader)
         {
-            BitReader reader = new BitReader(inputFile);
-            BitWriter writer = new BitWriter(outputFile);
-            Decoder  decoder = new Decoder(reader);
-
+            ArithmeticDecoder  decoder = new ArithmeticDecoder(reader);
+            var decompressedData = new List<uint>();
 
             // reading loop...
             for (; ; )
             {
                 uint symbol = decoder.DecodeSymbol();
                 if (symbol == EOF) break;
-                writer.WriteNBits(symbol, 8);
+                decompressedData.Add(symbol);
                 decoder.arithmeticModel.UpdateModel(symbol);
-                
             }
-
-            reader.Dispose();
-            writer.WriteNBits(1, 7);
-            writer.Dispose();
+            return decompressedData;
         }
     }
 }

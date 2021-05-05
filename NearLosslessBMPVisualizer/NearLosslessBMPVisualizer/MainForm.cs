@@ -20,7 +20,6 @@ namespace NearLosslessBMPVisualizer
 
         private int decodingK  = 0;
         private int decodingP  = 0;
-        private int decodingSM = 0;
         private int userPredictorSelection = 0;
         private int userKMaxReconstructionError = 1;
 
@@ -219,6 +218,26 @@ namespace NearLosslessBMPVisualizer
                                 {
                                     fileExtension += "A.nlp";
                                     compressedFilePath += "\\" + compressedFileName + fileExtension;
+
+                                    // Building the bmp compressed file format
+                                    BitWriter writer = new BitWriter(compressedFilePath);
+
+                                    // [1-A] writing the specific header byte by byte
+                                    for (int i = 0; i < headerBmpFile.Length; i++)
+                                        writer.WriteNBits(headerBmpFile[i], 8);
+
+                                    // [2-A] writing the predictor used (on 4 bits)
+                                    writer.WriteNBits((uint)userPredictorSelection, 4);
+
+                                    // [3-A] writing the k  value  used (on 4 bits)
+                                    writer.WriteNBits((uint)userKMaxReconstructionError, 4);
+
+                                    // [4-A] writing the save mode used (on 2 bits)
+                                    writer.WriteNBits((uint)comboBoxSaveMode.SelectedIndex, 2);
+
+                                    // [5-A] writing bmp data matrix elements encoded with Arithmetic CODER
+                                    ArithmeticCoder.CompressData(compressedDataMatrix, writer);
+                                    
                                     break;
                                 }
                             default: break;
@@ -247,7 +266,7 @@ namespace NearLosslessBMPVisualizer
             {
                 label15.Text = "Encoded Image";
                 inputFilePathDecoder = ofd.FileName;
-                bmpObject = Helpers.ReadEncodedBmpFormat(inputFilePathDecoder, ref decodingK, ref decodingP, ref decodingSM);
+                bmpObject = Helpers.ReadEncodedBmpFormat(inputFilePathDecoder, ref decodingK, ref decodingP);
 
                 // encoded  data/ header/ k/ p/ sm/  -> global 
 

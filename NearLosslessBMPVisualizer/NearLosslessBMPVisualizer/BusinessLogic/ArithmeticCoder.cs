@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace NearLosslessBMPVisualizer
 {
-    class Coder
+    class ArithmeticCoder
     {
         private BitWriter Writer;
-        private Model arithmeticModel;
+        private ArithmeticModel arithmeticModel;
 
         private UInt64 Range;
         private UInt32 UnderflowBits = 0;
@@ -20,12 +20,12 @@ namespace NearLosslessBMPVisualizer
         private readonly UInt32 firstShiftingMask  =  0x80000000;
         private readonly UInt32 secondShigtingMask =  0xC0000000;
 
-        private const int EOF = 256, TOTAL_SYMBOLS = 257, NR_BITS_TO_READ = 8;
+        private const int EOF = 512, TOTAL_SYMBOLS = 513;
 
-        public Coder(BitWriter writer)
+        public ArithmeticCoder(BitWriter writer)
         {
             Writer = writer;
-            arithmeticModel = new Model(TOTAL_SYMBOLS);
+            arithmeticModel = new ArithmeticModel(TOTAL_SYMBOLS);
         }
 
         private void EncodeSymbol(uint symbol)
@@ -89,33 +89,27 @@ namespace NearLosslessBMPVisualizer
             }
         }
 
-        public static void CompressFile(string inputFile, string outputFile)
+        public static void CompressData(int[,] dataMatrix, BitWriter writer)
         {
-            // Read uncompressed file variables
-            BitReader reader = new BitReader(inputFile);
-            var inputSize = NR_BITS_TO_READ * new FileInfo(inputFile).Length;
-
             // Write compressed file variables
-            BitWriter writer = new BitWriter(outputFile);
-            Coder coder = new Coder(writer);
+            ArithmeticCoder coder = new ArithmeticCoder(writer);
+            var size = (int)Math.Sqrt(dataMatrix.Length);
 
-            for (var i = inputSize - 1; i >= 0; i -= 8) 
+            for (int i = 0; i < size; i++)
             {
-                uint symbol = Convert.ToUInt32(reader.ReadNBits(NR_BITS_TO_READ));
+                for (int j = 0; j < size; j++)
+                {
+                    uint symbol = Convert.ToUInt32(dataMatrix[i, j] + 255);
 
-                // For each symbol and update the model statistics
-                coder.EncodeSymbol(symbol);
-                coder.arithmeticModel.UpdateModel(symbol);
-
+                    // For each symbol and update the model statistics
+                    coder.EncodeSymbol(symbol);
+                    coder.arithmeticModel.UpdateModel(symbol);
+                }
             }
-
-            reader.Dispose();
-
             coder.EncodeSymbol(EOF);
             coder.FlushEncoder();
             writer.WriteNBits(1, 7);
             writer.Dispose();
         }
-        
     }
 }

@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace NearLosslessBMPVisualizer
 {
-    class Model
+    class ArithmeticModel
     {
         private uint[] SymbolSums;
         private uint[] SymbolCounts;
         private uint NumberOfSymbols;
 
-        public Model(uint numOfSymbols)
+        public ArithmeticModel(uint numOfSymbols)
         {
             NumberOfSymbols = numOfSymbols;
             SymbolCounts = new uint[numOfSymbols];
