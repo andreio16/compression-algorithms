@@ -13,19 +13,20 @@ namespace NearLosslessBMPVisualizer
 {
     public partial class MainForm : Form
     {
+        private BmpFileObject bmpObject;
+        private NearLosslessEngine nlEngine;
+
         private bool   isFileEncoded = false;
+        private bool   isFileDecoded = false;
         private string inputFilePathEncoder  = @"";
         private string inputFilePathDecoder  = @"";
-
-
+        
         private int decodingK  = 0;
         private int decodingP  = 0;
         private int userPredictorSelection = 0;
-        private int userKMaxReconstructionError = 1;
+        private int userKMaxReconstructionError = 0;
+        private byte[,] auxOriginalImage = new byte[256, 256];
 
-        private BmpFileObject bmpObject;
-        private NearLosslessEngine nlEngine;
-        
         public MainForm()
         {
             InitializeComponent();
@@ -48,6 +49,7 @@ namespace NearLosslessBMPVisualizer
                 pictureBoxOriginalImage.Image = bmpObject.GetBmpImage();
 
                 // orig img/ header/ bmp -> global
+                auxOriginalImage = bmpObject.GetBmpData();
                 
                 Helpers.DrawHistogram(pictureBoxHistogram, Helpers.CreateHistogram(bmpObject.GetBmpData()), (float)numericUpDownHistogramScale.Value);
             }
@@ -55,27 +57,34 @@ namespace NearLosslessBMPVisualizer
 
         private void btnEncodeOriginalImage_Click(object sender, EventArgs e)
         {
-            userKMaxReconstructionError = (int)numericUpDownKValue.Value;
-
-            switch (comboBoxPredictorSelection.SelectedIndex)
+            try
             {
-                case 1: userPredictorSelection = 1; break;
-                case 2: userPredictorSelection = 2; break;
-                case 3: userPredictorSelection = 3; break;
-                case 4: userPredictorSelection = 4; break;
-                case 5: userPredictorSelection = 5; break;
-                case 6: userPredictorSelection = 6; break;
-                case 7: userPredictorSelection = 7; break;
-                case 8: userPredictorSelection = 8; break;
-                default: userPredictorSelection = 0; break;
+                if (String.IsNullOrEmpty(inputFilePathEncoder)) throw new NullReferenceException();
+
+                userKMaxReconstructionError = (int)numericUpDownKValue.Value;
+
+                switch (comboBoxPredictorSelection.SelectedIndex)
+                {
+                    case 1: userPredictorSelection = 1; break;
+                    case 2: userPredictorSelection = 2; break;
+                    case 3: userPredictorSelection = 3; break;
+                    case 4: userPredictorSelection = 4; break;
+                    case 5: userPredictorSelection = 5; break;
+                    case 6: userPredictorSelection = 6; break;
+                    case 7: userPredictorSelection = 7; break;
+                    case 8: userPredictorSelection = 8; break;
+                    default: userPredictorSelection = 0; break;
+                }
+
+                nlEngine = new NearLosslessEngine(bmpObject.GetBmpData());
+                nlEngine.CompressImage(userPredictorSelection, userKMaxReconstructionError);
+                MessageBox.Show("Image was encoded succesfully!");
+                isFileEncoded = true;
             }
-            
-            nlEngine = new NearLosslessEngine(bmpObject.GetBmpData());
-            nlEngine.CompressImage(userPredictorSelection, userKMaxReconstructionError);
-            textBoxMinErrorValue.Text = nlEngine.minValueError.ToString();
-            textBoxMaxErrorValue.Text = nlEngine.maxValueError.ToString();
-            MessageBox.Show("Image was encoded succesfully!");
-            isFileEncoded = true;
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Warning: You forgot to load Original Image!");
+            }
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
@@ -276,14 +285,25 @@ namespace NearLosslessBMPVisualizer
 
         private void btnDecodeImage_Click(object sender, EventArgs e)
         {
-            nlEngine = new NearLosslessEngine(bmpObject.GetBmpDataEncoded());
+            try
+            {
+                if (String.IsNullOrEmpty(inputFilePathDecoder)) throw new NullReferenceException();
 
-            nlEngine.DecompressImage(decodingP, decodingK);
+                nlEngine = new NearLosslessEngine(bmpObject.GetBmpDataEncoded());
 
-            pictureBoxDecodedImage.Image = Helpers.BuildBitmapFromMatrix(nlEngine.GetDecodedImageMatrix());
+                nlEngine.DecompressImage(decodingP, decodingK, auxOriginalImage);
 
-            MessageBox.Show("Image was decoded succesfully!");
-            label15.Text = "Decoded Image";
+                pictureBoxDecodedImage.Image = Helpers.BuildBitmapFromMatrix(nlEngine.GetDecodedImageMatrix());
+
+                MessageBox.Show("Image was decoded succesfully!");
+                label15.Text = "Decoded Image";
+                isFileDecoded = true;
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Warning: You forgot to load Decoded Image!");
+            }
+
         }
 
         private void btnSaveDecodedImage_Click(object sender, EventArgs e)
@@ -328,10 +348,30 @@ namespace NearLosslessBMPVisualizer
                     }
                 }
                 MessageBox.Show("Decoded image succesfully saved!");
+                isFileDecoded = false;
             }
             catch (NullReferenceException)
             {
                 MessageBox.Show("Warning: You forgot to load/decode the image before saving.");
+            }
+        }
+
+        private void btnVerify_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (String.IsNullOrEmpty(inputFilePathDecoder)) throw new NullReferenceException();
+                if (auxOriginalImage == null || isFileDecoded == false) throw new NullReferenceException();
+
+                nlEngine = new NearLosslessEngine(bmpObject.GetBmpDataEncoded());
+                nlEngine.DecompressImage(decodingP, decodingK, auxOriginalImage);
+                textBoxMinErrorValue.Text = nlEngine.minValueError.ToString();
+                textBoxMaxErrorValue.Text = nlEngine.maxValueError.ToString();
+
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Warning: You forgot to load original image/ decode the same image!");
             }
         }
 

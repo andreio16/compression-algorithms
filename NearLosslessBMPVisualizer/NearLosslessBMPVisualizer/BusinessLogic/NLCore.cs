@@ -39,7 +39,6 @@ namespace NearLosslessBMPVisualizer
 
         public NearLosslessEngine(int[,] quantizedImageMatrix)
         {
-
             if (quantizedImageMatrix.Length != errorPredictedQuantizedImage.Length)
             {
                 throw new InvalidOperationException("Image matrix must be of size 256x256!");
@@ -47,9 +46,9 @@ namespace NearLosslessBMPVisualizer
             else
             {
                 int size = (int)Math.Sqrt(quantizedImageMatrix.Length);
-                for (int i = 0; i < size; i++)
+                for (int i = 0; i < 256; i++)
                 {
-                    for (int j = 0; j < size; j++)
+                    for (int j = 0; j < 256; j++)
                     {
                         decodedImage[i, j] = 0;
                         originalImage[i, j] = 0;
@@ -96,15 +95,11 @@ namespace NearLosslessBMPVisualizer
                     if (temp > 255) temp = 255;
                     if (temp < 0) temp = 0;
                     decodedImage[i, j] = (byte)temp;
-
-                    temp = originalImage[i, j] - decodedImage[i, j];
-                    if (temp > maxValueError) maxValueError = temp;
-                    if (temp < minValueError) minValueError = temp;
                 }
             }
         }
 
-        public void DecompressImage(int inputPredictorSelection, int maxReconstructionError)
+        public void DecompressImage(int inputPredictorSelection, int maxReconstructionError, byte[,] inputOriginalImage)
         {
             int size = (int)Math.Sqrt(errorPredictedQuantizedImage.Length);
 
@@ -118,6 +113,9 @@ namespace NearLosslessBMPVisualizer
                     if (temp < 0) temp = 0;
                     decodedImage[i, j] = (byte)temp;
 
+                    temp = inputOriginalImage[i, j] - decodedImage[i, j];
+                    if (temp > maxValueError) maxValueError = temp;
+                    if (temp < minValueError) minValueError = temp;
                 }
             }
         }
