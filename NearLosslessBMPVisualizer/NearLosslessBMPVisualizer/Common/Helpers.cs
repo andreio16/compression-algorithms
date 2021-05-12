@@ -151,28 +151,21 @@ namespace NearLosslessBMPVisualizer
             }
         }
 
-        public static int[,] SubstactValueForEachElement(List<uint> dataList, int value)
+        public static int[,] BuildMatrixFromListArithmetic(List<int> dataList)
         {
             int size = (int)Math.Sqrt(dataList.Count);
             int[,] result = new int[size, size];
+            int index = 0;
 
-            int lineNr = 0;
-            int columnNr  = 0;
-
-            result[lineNr, columnNr] = (int)dataList[0] - value;
-
-            for (int i = 1; i < dataList.Count; i++)
+            for (int i = 0; i < size; i++)
             {
-                result[lineNr, columnNr] = (int)dataList[i] - value;
-
-                columnNr++;
-
-                if (i % size == 0) 
+                for (int j = 0; j < size; j++)
                 {
-                    lineNr++;
-                    columnNr = 0;
+                    result[i, j] = dataList[index];
+                    index++;
                 }
             }
+
             return result;
         }
     }
@@ -280,8 +273,8 @@ namespace NearLosslessBMPVisualizer
                     }
                 case 2:
                     {
-                        var uintDecodedValuesList = ArithmeticDecoder.DecompressData(reader);
-                        _dataContainerEncoded = Helpers.SubstactValueForEachElement(uintDecodedValuesList, 255);
+                        var intDecodedValuesList = ArithmeticDecoder.DecompressData(reader);
+                        _dataContainerEncoded = Helpers.BuildMatrixFromListArithmetic(intDecodedValuesList);
                         break;
                     }
                 default: break;

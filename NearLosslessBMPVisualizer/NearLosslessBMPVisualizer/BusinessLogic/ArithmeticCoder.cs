@@ -15,7 +15,7 @@ namespace NearLosslessBMPVisualizer
         private readonly UInt32 firstShiftingMask  =  0x80000000;
         private readonly UInt32 secondShigtingMask =  0xC0000000;
 
-        private const int EOF = 512, TOTAL_SYMBOLS = 513;
+        private const int EOF = 510, TOTAL_SYMBOLS = 511;
 
         public ArithmeticCoder(BitWriter writer)
         {
@@ -94,7 +94,7 @@ namespace NearLosslessBMPVisualizer
             {
                 for (int j = 0; j < size; j++)
                 {
-                    uint symbol = Convert.ToUInt32(dataMatrix[i, j] + 255);
+                    uint symbol = (uint)(dataMatrix[i, j] + 255);
 
                     // For each symbol and update the model statistics
                     coder.EncodeSymbol(symbol);

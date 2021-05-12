@@ -17,7 +17,7 @@ namespace NearLosslessBMPVisualizer
         private readonly UInt32 firstShiftingMask   = 0x80000000;
         private readonly UInt32 secondShiftingMask  = 0xC0000000;
 
-        private const int EOF = 512, TOTAL_SYMBOLS = 513;
+        private const int EOF = 510, TOTAL_SYMBOLS = 511;
 
         public ArithmeticDecoder(BitReader reader)
         {
@@ -59,17 +59,19 @@ namespace NearLosslessBMPVisualizer
 
         }
 
-        public static List<uint> DecompressData(BitReader reader)
+        public static List<int> DecompressData(BitReader reader)
         {
             ArithmeticDecoder  decoder = new ArithmeticDecoder(reader);
-            var decompressedData = new List<uint>();
+            var decompressedData = new List<int>();
 
             // reading loop...
             for (; ; )
             {
                 uint symbol = decoder.DecodeSymbol();
                 if (symbol == EOF) break;
-                decompressedData.Add(symbol);
+
+                int reconstructSymbolFromRange = (int)symbol - 255;
+                decompressedData.Add(reconstructSymbolFromRange);
                 decoder.arithmeticModel.UpdateModel(symbol);
             }
             return decompressedData;
