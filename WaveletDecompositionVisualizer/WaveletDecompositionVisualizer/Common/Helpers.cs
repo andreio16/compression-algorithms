@@ -12,6 +12,23 @@ namespace WaveletDecompositionVisualizer.Common
         {
             return new BmpFileObject(filePath);
         }
+
+        public static List<float> AddReverseNElementsPadding(float[] list, int nrOfPaddingElements)
+        {
+            var result = new List<float>(list);
+
+            var frontPadding = list.ToList().GetRange(1, nrOfPaddingElements);
+
+            var backPadding = list.ToList().GetRange(list.Length - nrOfPaddingElements - 1, nrOfPaddingElements);
+
+            for (int i = 0, j = nrOfPaddingElements - 1; i < nrOfPaddingElements; i++, j--) 
+            {
+                result.Insert(0, frontPadding[i]);
+                result.Add(backPadding[j]);
+            }
+
+            return result;
+        }
     }
 
 

@@ -41,7 +41,7 @@
             // 
             this.pictureBoxOriginalImage.BackColor = System.Drawing.SystemColors.Control;
             this.pictureBoxOriginalImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBoxOriginalImage.Location = new System.Drawing.Point(11, 30);
+            this.pictureBoxOriginalImage.Location = new System.Drawing.Point(21, 30);
             this.pictureBoxOriginalImage.Margin = new System.Windows.Forms.Padding(2);
             this.pictureBoxOriginalImage.Name = "pictureBoxOriginalImage";
             this.pictureBoxOriginalImage.Size = new System.Drawing.Size(512, 512);
@@ -52,7 +52,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(208, 9);
+            this.label1.Location = new System.Drawing.Point(221, 9);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(88, 15);
@@ -61,7 +61,7 @@
             // 
             // btnLoadBMP
             // 
-            this.btnLoadBMP.Location = new System.Drawing.Point(11, 546);
+            this.btnLoadBMP.Location = new System.Drawing.Point(21, 546);
             this.btnLoadBMP.Margin = new System.Windows.Forms.Padding(2);
             this.btnLoadBMP.Name = "btnLoadBMP";
             this.btnLoadBMP.Size = new System.Drawing.Size(78, 25);
@@ -74,7 +74,7 @@
             // 
             this.pictureBoxWaveletImage.BackColor = System.Drawing.SystemColors.Control;
             this.pictureBoxWaveletImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBoxWaveletImage.Location = new System.Drawing.Point(664, 30);
+            this.pictureBoxWaveletImage.Location = new System.Drawing.Point(552, 30);
             this.pictureBoxWaveletImage.Margin = new System.Windows.Forms.Padding(2);
             this.pictureBoxWaveletImage.Name = "pictureBoxWaveletImage";
             this.pictureBoxWaveletImage.Size = new System.Drawing.Size(512, 512);
@@ -85,7 +85,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(882, 9);
+            this.label2.Location = new System.Drawing.Point(778, 9);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(88, 15);
@@ -98,7 +98,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(1187, 581);
+            this.ClientSize = new System.Drawing.Size(1085, 695);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.pictureBoxWaveletImage);
             this.Controls.Add(this.btnLoadBMP);
