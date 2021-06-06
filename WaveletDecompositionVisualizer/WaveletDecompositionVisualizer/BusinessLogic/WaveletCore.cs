@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 using WaveletDecompositionVisualizer.Common;
 
 namespace WaveletDecompositionVisualizer.BusinessLogic
@@ -56,39 +54,8 @@ namespace WaveletDecompositionVisualizer.BusinessLogic
         };
         #endregion
 
-        private readonly int filterSize = 9;
+        private readonly int filterSize  = 9;
         private readonly int paddingSize = 4;
-
-        private List<float> BuildAnalysisVectorLH(float[] line, int length)
-        {
-            var lowConvolutionList  = new List<float>();
-            var highConvolutionList = new List<float>();
-            var processedLine = Helpers.AddReverseNElementsPadding(line, paddingSize);
-
-            // Compute Convolution between processedLine and analysis filters (H) and (L)
-            for (int lineIndex = 0; lineIndex < length; lineIndex++)
-            {
-                float lowValue = 0.0f, highValue = 0.0f;
-
-                for (int windowIndex = 0; windowIndex < filterSize; windowIndex++)
-                {
-                    lowValue  += processedLine[lineIndex + windowIndex] * _analysisL[windowIndex];
-                    highValue += processedLine[lineIndex + windowIndex] * _analysisH[windowIndex];
-                }
-                lowConvolutionList.Add(lowValue);
-                highConvolutionList.Add(highValue);
-            }
-
-            var resultVector = new List<float>();
-            // Down Sample L
-            for (int i = 0; i < lowConvolutionList.Count; i += 2)
-                resultVector.Add(lowConvolutionList[i]);
-            // Down Sample H
-            for (int i = 1; i < highConvolutionList.Count; i += 2)
-                resultVector.Add(highConvolutionList[i]);
-
-            return resultVector;
-        }
 
         private List<float> BuildSyntesisVector(float[] lineLH, int length)
         {
@@ -116,12 +83,48 @@ namespace WaveletDecompositionVisualizer.BusinessLogic
 
                 for (int windowIndex = 0; windowIndex < filterSize; windowIndex++)
                 {
-                    lowValue  += lowUpSampleList[lineIndex + windowIndex]  * _synthesisL[lineIndex];
-                    highValue += highUpSampleList[lineIndex + windowIndex] * _synthesisH[lineIndex];
+                    lowValue  += lowUpSampleList[lineIndex + windowIndex]  * _synthesisL[windowIndex];
+                    highValue += highUpSampleList[lineIndex + windowIndex] * _synthesisH[windowIndex];
                 }
                 reconstructedResult.Add(lowValue + highValue);
             }
             return reconstructedResult;
         }
+
+        private List<float> BuildAnalysisVectorLowHigh(float[] line, int length)
+        {
+            var lowConvolutionList = new List<float>();
+            var highConvolutionList = new List<float>();
+            var processedLine = Helpers.AddReverseNElementsPadding(line, paddingSize);
+
+            // Compute Convolution between processedLine and analysis filters (H) and (L)
+            for (int lineIndex = 0; lineIndex < length; lineIndex++)
+            {
+                float lowValue = 0.0f, highValue = 0.0f;
+
+                for (int windowIndex = 0; windowIndex < filterSize; windowIndex++)
+                {
+                    lowValue += processedLine[lineIndex + windowIndex] * _analysisL[windowIndex];
+                    highValue += processedLine[lineIndex + windowIndex] * _analysisH[windowIndex];
+                }
+                lowConvolutionList.Add(lowValue);
+                highConvolutionList.Add(highValue);
+            }
+
+            var resultVector = new List<float>();
+            // Down Sample L
+            for (int i = 0; i < lowConvolutionList.Count; i += 2)
+                resultVector.Add(lowConvolutionList[i]);
+            // Down Sample H
+            for (int i = 1; i < highConvolutionList.Count; i += 2)
+                resultVector.Add(highConvolutionList[i]);
+
+            return resultVector;
+        }
+
+        public List<float> MakeSynthesis(float[] inputVector, int length) { return BuildSyntesisVector(inputVector, length); }
+
+        public List<float> MakeAnalysis(float[] inputVector, int length) { return BuildAnalysisVectorLowHigh(inputVector, length); }
+        
     }
 }
