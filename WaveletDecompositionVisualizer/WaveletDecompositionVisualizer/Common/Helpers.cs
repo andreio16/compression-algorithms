@@ -42,7 +42,7 @@ namespace WaveletDecompositionVisualizer.Common
             {
                 for (int j = 0; j < size; j++)
                 {
-                    // no scaling for the left corner [delimited by x & y]
+                    // no scaling for the left corner [delimited by x & y]    (i <= x && j <= y)
                     if (i <= x && j <= y)
                     {
                         var value = (int)dataMatrix[i, j];
@@ -114,6 +114,20 @@ namespace WaveletDecompositionVisualizer.Common
             var size = (int)Math.Sqrt(matrix.Length);
             for (int i = 0; i < size; i++)
                 matrix[x, i] = line[i];
+        }
+
+        public static bool HasAllValuesZeros(byte[,] matrix)
+        {
+            var size = (int)Math.Sqrt(matrix.Length);
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    if (matrix[i, j] != 0)
+                        return false;
+                }
+            }
+            return true;
         }
     }
     

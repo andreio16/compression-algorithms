@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Linq;
+using System.IO;
 using System.Windows.Forms;
-using System.Collections.Generic;
+using WaveletDecompositionVisualizer.IOLib;
 using WaveletDecompositionVisualizer.Common;
 using WaveletDecompositionVisualizer.BusinessLogic;
 
@@ -30,6 +30,7 @@ namespace WaveletDecompositionVisualizer
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 inputFilePathEncoder = ofd.FileName;
+
                 bmpObject = Helpers.ReadBmpFormat(inputFilePathEncoder);
                 pictureBoxOriginalImage.Image = bmpObject.GetBmpImage();
 
@@ -40,17 +41,82 @@ namespace WaveletDecompositionVisualizer
             }
         }
 
+        private void btnSaveEncodedWVL_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (bmpObject == null)
+                    throw new NullReferenceException();
+
+                var headerBmpFile = bmpObject.GetBmpHeader();
+                var size = (int)Math.Sqrt(waveletImage.Length);
+                var saveFileName  = "\\" + Path.GetFileNameWithoutExtension(inputFilePathEncoder) + ".wvl";
+                
+                using (var fbd = new FolderBrowserDialog())
+                {
+                    var result = fbd.ShowDialog();
+                    if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                    {
+                        var compressedFilePath = fbd.SelectedPath + saveFileName;
+
+                        // Building the bmp compressed file format
+                        BitWriter writer = new BitWriter(compressedFilePath);
+
+                        // Writing the specific header byte by byte
+                        for (int i = 0; i < headerBmpFile.Length; i++)
+                            writer.WriteNBits(headerBmpFile[i], 8);
+
+                        // Writing wvl data matrix elements
+                        for (int i = 0; i < size; i++)
+                        {
+                            for (int j = 0; j < size; j++)
+                            {
+                                writer.WriteNBits((uint)(Math.Round(waveletImage[i, j])), 8);
+                            }
+                        }
+                        writer.WriteNBits(1, 7);
+                        writer.Dispose();
+                    }
+                }
+
+                //using (var fbd = new FolderBrowserDialog())
+                //{
+                //    var result = fbd.ShowDialog();
+                //    if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                //    {
+                //        var compressedFilePath = fbd.SelectedPath + saveFileName;
+                //        using (Stream writer = new FileStream(compressedFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
+                //        {
+                //            using (BinaryWriter binaryWriter = new BinaryWriter(writer))
+                //            {
+                //                for (int i = 0; i < size; i++)
+                //                    for (int j = 0; j < size; j++)
+                //                        binaryWriter.Write(waveletImage[i,j]);
+                //            }
+                //        }
+                //    }
+                //}
+
+                MessageBox.Show("Image succesfully saved!");
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Warning: You forgot to load the image first!");
+            }
+        }
+
         private void btnAnH1_Click(object sender, EventArgs e)
         {
             try
             {
-                if (String.IsNullOrEmpty(inputFilePathEncoder)) throw new NullReferenceException();
+                if (bmpObject == null)
+                    throw new NullReferenceException();
 
                 DoAnalysisHorizontal(512);
             }
             catch (NullReferenceException)
             {
-                MessageBox.Show("Warning: You forgot to load .bmp image first!");
+                MessageBox.Show("Warning: You forgot to load image first!");
             }
         }
 
@@ -58,13 +124,14 @@ namespace WaveletDecompositionVisualizer
         {
             try
             {
-                if (String.IsNullOrEmpty(inputFilePathEncoder)) throw new NullReferenceException();
+                if (bmpObject == null)
+                    throw new NullReferenceException();
 
                 DoAnalysisVertical(512);
             }
             catch (NullReferenceException)
             {
-                MessageBox.Show("Warning: You forgot to load .bmp image first!");
+                MessageBox.Show("Warning: You forgot to load image first!");
             }
         }
 
@@ -99,18 +166,35 @@ namespace WaveletDecompositionVisualizer
 
 
         #region Form Designer Methods -- DECODER
+        private void btnLoadWVL_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "Wavelet (*wvl)|*.wvl";
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                inputFilePathWavelet = ofd.FileName;
+
+                bmpObject = Helpers.ReadBmpFormat(inputFilePathWavelet);
+                waveletImage = bmpObject.GetBmpFloatData();
+                pictureBoxWaveletImage.Image = Helpers.BuildBitmapFromMatrix(waveletImage);
+            }
+
+
+        }
 
         private void btnSyH1_Click(object sender, EventArgs e)
         {
             try
             {
-                if (String.IsNullOrEmpty(inputFilePathEncoder)) throw new NullReferenceException();
+                if (bmpObject == null)
+                    throw new NullReferenceException();
 
                 DoSynthesisHorizontal(512);
             }
             catch (NullReferenceException)
             {
-                MessageBox.Show("Warning: You forgot to load .bmp image first!");
+                MessageBox.Show("Warning: You forgot to load image first!");
             }
         }
 
@@ -118,13 +202,14 @@ namespace WaveletDecompositionVisualizer
         {
             try
             {
-                if (String.IsNullOrEmpty(inputFilePathEncoder)) throw new NullReferenceException();
+                if (bmpObject == null)
+                    throw new NullReferenceException();
 
                 DoSynthesisVertical(512);
             }
             catch (NullReferenceException)
             {
-                MessageBox.Show("Warning: You forgot to load .bmp image first!");
+                MessageBox.Show("Warning: You forgot to load image first!");
             }
 
         }
@@ -164,7 +249,8 @@ namespace WaveletDecompositionVisualizer
         {
             try
             {
-                if (String.IsNullOrEmpty(inputFilePathEncoder)) throw new NullReferenceException();
+                if (bmpObject == null)
+                    throw new NullReferenceException();
 
                 waveletImage = bmpObject.GetBmpFloatData();
 
@@ -174,7 +260,7 @@ namespace WaveletDecompositionVisualizer
             }
             catch (NullReferenceException)
             {
-                MessageBox.Show("Warning: You forgot to load .bmp image first!");
+                MessageBox.Show("Warning: You forgot to load image first!");
             }
         }
 
@@ -182,7 +268,9 @@ namespace WaveletDecompositionVisualizer
         {
             try
             {
-                if (String.IsNullOrEmpty(inputFilePathEncoder)) throw new NullReferenceException();
+                if (bmpObject == null)
+                    throw new NullReferenceException();
+
                 var x = (int)numericUpDownX.Value;
                 var y = (int)numericUpDownY.Value;
                 var offset = (int)numericUpDownOffset.Value;
@@ -191,10 +279,43 @@ namespace WaveletDecompositionVisualizer
             }
             catch (NullReferenceException)
             {
-                MessageBox.Show("Warning: You forgot to load .bmp image first!");
+                MessageBox.Show("Warning: You forgot to load image first!");
             }
         }
+
+        private void btnVerifyError_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Helpers.HasAllValuesZeros(BmpFileObject.auxImage))
+                    throw new NullReferenceException();
+
+                var min = int.MaxValue;
+                var max = int.MinValue;
+                var size = (int)Math.Sqrt(BmpFileObject.auxImage.Length);
+
+                for (int i = 0; i < size; i++)
+                {
+                    for (int j = 0; j < size; j++)
+                    {
+                        var errorValue = (int)(BmpFileObject.auxImage[i, j] - Math.Round(waveletImage[i, j]));
+                        if (errorValue < min)
+                            min = errorValue;
+                        if (errorValue > max)
+                            max = errorValue;
+                    }
+                }
+                textBoxMinErrorValue.Text = min.ToString();
+                textBoxMaxErrorValue.Text = max.ToString();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Please load both .bmp and .wvl images!");
+            }
+        }
+
         #endregion
+
 
     }
 }
