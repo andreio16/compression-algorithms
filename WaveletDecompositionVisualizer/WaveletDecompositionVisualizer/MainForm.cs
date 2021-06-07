@@ -53,7 +53,21 @@ namespace WaveletDecompositionVisualizer
                 MessageBox.Show("Warning: You forgot to load .bmp image first!");
             }
         }
-        
+
+        private void btnAnV1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (String.IsNullOrEmpty(inputFilePathEncoder)) throw new NullReferenceException();
+
+                DoAnalysisVertical(512);
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Warning: You forgot to load .bmp image first!");
+            }
+        }
+
         private void DoAnalysisHorizontal(int size)
         {
             for (int i = 0; i < size; i++)
@@ -67,8 +81,22 @@ namespace WaveletDecompositionVisualizer
             numericUpDownY.Value = size;
             btnShowWavelet_Click(null, null);
         }
+
+        private void DoAnalysisVertical(int size)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                var line = Helpers.ExtractLineX(i, waveletImage);
+                var codedLine = wvlEngine.MakeAnalysis(line, size);
+                Helpers.UpdateLineX(i, codedLine.ToArray(), ref waveletImage);
+            }
+
+            numericUpDownX.Value = size;
+            numericUpDownY.Value = size / 2;
+            btnShowWavelet_Click(null, null);
+        }
         #endregion
-        
+
 
         #region Form Designer Methods -- DECODER
 
@@ -86,6 +114,21 @@ namespace WaveletDecompositionVisualizer
             }
         }
 
+        private void btnSyV1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (String.IsNullOrEmpty(inputFilePathEncoder)) throw new NullReferenceException();
+
+                DoSynthesisVertical(512);
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Warning: You forgot to load .bmp image first!");
+            }
+
+        }
+
         private void DoSynthesisHorizontal(int size)
         {
             for (int i = 0; i < size; i++)
@@ -93,6 +136,20 @@ namespace WaveletDecompositionVisualizer
                 var column = Helpers.ExtractColumnX(i, waveletImage);
                 var decodedColumn = wvlEngine.MakeSynthesis(column, size);
                 Helpers.UpdateColumnX(i, decodedColumn.ToArray(), ref waveletImage);
+            }
+
+            numericUpDownX.Value = size;
+            numericUpDownY.Value = size;
+            btnShowWavelet_Click(null, null);
+        }
+
+        private void DoSynthesisVertical(int size)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                var line = Helpers.ExtractLineX(i, waveletImage);
+                var decodedLine = wvlEngine.MakeSynthesis(line, size);
+                Helpers.UpdateLineX(i, decodedLine.ToArray(), ref waveletImage);
             }
 
             numericUpDownX.Value = size;
@@ -110,6 +167,9 @@ namespace WaveletDecompositionVisualizer
                 if (String.IsNullOrEmpty(inputFilePathEncoder)) throw new NullReferenceException();
 
                 waveletImage = bmpObject.GetBmpFloatData();
+
+                numericUpDownX.Value = numericUpDownX.Maximum;
+                numericUpDownY.Value = numericUpDownY.Maximum;
                 pictureBoxWaveletImage.Image = Helpers.BuildBitmapFromMatrix(waveletImage);
             }
             catch (NullReferenceException)
@@ -135,5 +195,6 @@ namespace WaveletDecompositionVisualizer
             }
         }
         #endregion
+
     }
 }

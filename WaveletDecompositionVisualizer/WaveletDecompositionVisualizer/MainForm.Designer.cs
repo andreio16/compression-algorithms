@@ -34,6 +34,8 @@
             this.pictureBoxWaveletImage = new System.Windows.Forms.PictureBox();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBoxWaveletImage = new System.Windows.Forms.GroupBox();
+            this.btnShowWavelet = new System.Windows.Forms.Button();
+            this.btnRefresh = new System.Windows.Forms.Button();
             this.btnSyV1 = new System.Windows.Forms.Button();
             this.btnSyH1 = new System.Windows.Forms.Button();
             this.btnAnV1 = new System.Windows.Forms.Button();
@@ -47,8 +49,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.numericUpDownScale = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
-            this.btnRefresh = new System.Windows.Forms.Button();
-            this.btnShowWavelet = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxOriginalImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxWaveletImage)).BeginInit();
             this.groupBoxWaveletImage.SuspendLayout();
@@ -124,10 +124,32 @@
             this.groupBoxWaveletImage.Controls.Add(this.btnAnH1);
             this.groupBoxWaveletImage.Location = new System.Drawing.Point(1076, 133);
             this.groupBoxWaveletImage.Name = "groupBoxWaveletImage";
-            this.groupBoxWaveletImage.Size = new System.Drawing.Size(223, 409);
+            this.groupBoxWaveletImage.Size = new System.Drawing.Size(223, 252);
             this.groupBoxWaveletImage.TabIndex = 6;
             this.groupBoxWaveletImage.TabStop = false;
             this.groupBoxWaveletImage.Text = "Wavelet Operations";
+            // 
+            // btnShowWavelet
+            // 
+            this.btnShowWavelet.Location = new System.Drawing.Point(126, 198);
+            this.btnShowWavelet.Margin = new System.Windows.Forms.Padding(2);
+            this.btnShowWavelet.Name = "btnShowWavelet";
+            this.btnShowWavelet.Size = new System.Drawing.Size(77, 25);
+            this.btnShowWavelet.TabIndex = 9;
+            this.btnShowWavelet.Text = "Show XY";
+            this.btnShowWavelet.UseVisualStyleBackColor = true;
+            this.btnShowWavelet.Click += new System.EventHandler(this.btnShowWavelet_Click);
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Location = new System.Drawing.Point(22, 198);
+            this.btnRefresh.Margin = new System.Windows.Forms.Padding(2);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(77, 25);
+            this.btnRefresh.TabIndex = 8;
+            this.btnRefresh.Text = "Refresh";
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
             // btnSyV1
             // 
@@ -138,6 +160,7 @@
             this.btnSyV1.TabIndex = 7;
             this.btnSyV1.Text = "Sy V1";
             this.btnSyV1.UseVisualStyleBackColor = true;
+            this.btnSyV1.Click += new System.EventHandler(this.btnSyV1_Click);
             // 
             // btnSyH1
             // 
@@ -159,6 +182,7 @@
             this.btnAnV1.TabIndex = 5;
             this.btnAnV1.Text = "An V1";
             this.btnAnV1.UseVisualStyleBackColor = true;
+            this.btnAnV1.Click += new System.EventHandler(this.btnAnV1_Click);
             // 
             // btnAnH1
             // 
@@ -305,28 +329,6 @@
             this.label3.Size = new System.Drawing.Size(40, 13);
             this.label3.TabIndex = 11;
             this.label3.Text = "Scale :";
-            // 
-            // btnRefresh
-            // 
-            this.btnRefresh.Location = new System.Drawing.Point(24, 142);
-            this.btnRefresh.Margin = new System.Windows.Forms.Padding(2);
-            this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(77, 25);
-            this.btnRefresh.TabIndex = 8;
-            this.btnRefresh.Text = "Refresh";
-            this.btnRefresh.UseVisualStyleBackColor = true;
-            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
-            // 
-            // btnShowWavelet
-            // 
-            this.btnShowWavelet.Location = new System.Drawing.Point(128, 142);
-            this.btnShowWavelet.Margin = new System.Windows.Forms.Padding(2);
-            this.btnShowWavelet.Name = "btnShowWavelet";
-            this.btnShowWavelet.Size = new System.Drawing.Size(77, 25);
-            this.btnShowWavelet.TabIndex = 9;
-            this.btnShowWavelet.Text = "Show XY";
-            this.btnShowWavelet.UseVisualStyleBackColor = true;
-            this.btnShowWavelet.Click += new System.EventHandler(this.btnShowWavelet_Click);
             // 
             // MainForm
             // 
