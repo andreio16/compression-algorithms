@@ -10,9 +10,9 @@ namespace WaveletDecompositionVisualizer.Common
 {
     public static class Helpers
     {
-        public static BmpFileObject ReadBmpFormat(string filePath)
+        public static BmpWvlFileObject ReadBmpFormat(string filePath, bool isWaveletFile)
         {
-            return new BmpFileObject(filePath);
+            return new BmpWvlFileObject(filePath, isWaveletFile);
         }
 
         public static Bitmap BuildBitmapFromMatrix(float[,] dataMatrix)
@@ -133,10 +133,11 @@ namespace WaveletDecompositionVisualizer.Common
     }
     
 
-    public class BmpFileObject
+    public class BmpWvlFileObject
     {
         private Bitmap _image;
         private byte[,] _dataContainer;
+        private float[,] _waveletContainer;
         private byte[] _headerContainer = new byte[1078];
         public static byte[,] auxImage  = new byte[512, 512];
 
@@ -170,26 +171,50 @@ namespace WaveletDecompositionVisualizer.Common
             return result;
         }
 
-        public BmpFileObject(string filePath)
+        public float[,] GetWaveletFloatData()
         {
-            _image = new Bitmap(512, 512);
-            _dataContainer = new byte[512, 512];
-            
-            BitReader reader = new BitReader(filePath);
+            return _waveletContainer;
+        }
 
-            for (int i = 0; i < _headerContainer.Length; i++)
-                _headerContainer[i] = (byte)reader.ReadNBits(8);
-
-            for (int i = 511; i >= 0; i--)
+        public BmpWvlFileObject(string filePath, bool isWaveletFile)
+        {
+            if (isWaveletFile == false)
             {
-                for (int j = 0; j < 512; j++)
-                {
-                    _dataContainer[j, i] = (byte)reader.ReadNBits(8);
-                    _image.SetPixel(j, i, Color.FromArgb(_dataContainer[j, i], _dataContainer[j, i], _dataContainer[j, i]));
-                }
-            }
+                _image = new Bitmap(512, 512);
+                _dataContainer = new byte[512, 512];
 
-            reader.Dispose();
+                BitReader reader = new BitReader(filePath);
+
+                for (int i = 0; i < _headerContainer.Length; i++)
+                    _headerContainer[i] = (byte)reader.ReadNBits(8);
+
+                for (int i = 511; i >= 0; i--)
+                {
+                    for (int j = 0; j < 512; j++)
+                    {
+                        _dataContainer[j, i] = (byte)reader.ReadNBits(8);
+                        _image.SetPixel(j, i, Color.FromArgb(_dataContainer[j, i], _dataContainer[j, i], _dataContainer[j, i]));
+                    }
+                }
+
+                reader.Dispose();
+            }
+            else
+            {
+                _waveletContainer = LoadWaveletFromFile(filePath);
+            }
+        }
+        
+        private float[,] LoadWaveletFromFile(string filePath)
+        {
+            float[,] waveletDataMatrix = new float[512, 512];
+            using (BinaryReader reader = new BinaryReader(File.Open(filePath, FileMode.Open)))
+            {
+                for (int i = 0; i < 512; i++)
+                    for (int j = 0; j < 512; j++)
+                        waveletDataMatrix[i, j] = reader.ReadSingle();
+            }
+            return waveletDataMatrix;
         }
     }
 

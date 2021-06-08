@@ -9,7 +9,7 @@ namespace WaveletDecompositionVisualizer
 {
     public partial class MainForm : Form
     {
-        private BmpFileObject bmpObject;
+        private BmpWvlFileObject bmpObject;
         private string inputFilePathEncoder = @"";
         private string inputFilePathWavelet = @"";
 
@@ -31,10 +31,10 @@ namespace WaveletDecompositionVisualizer
             {
                 inputFilePathEncoder = ofd.FileName;
 
-                bmpObject = Helpers.ReadBmpFormat(inputFilePathEncoder);
+                bmpObject = Helpers.ReadBmpFormat(inputFilePathEncoder, false);
                 pictureBoxOriginalImage.Image = bmpObject.GetBmpImage();
 
-                BmpFileObject.auxImage = bmpObject.GetBmpData();
+                BmpWvlFileObject.auxImage = bmpObject.GetBmpData();
 
                 waveletImage = bmpObject.GetBmpFloatData();
                 pictureBoxWaveletImage.Image = Helpers.BuildBitmapFromMatrix(waveletImage);
@@ -51,7 +51,7 @@ namespace WaveletDecompositionVisualizer
                 var headerBmpFile = bmpObject.GetBmpHeader();
                 var size = (int)Math.Sqrt(waveletImage.Length);
                 var saveFileName  = "\\" + Path.GetFileNameWithoutExtension(inputFilePathEncoder) + ".wvl";
-                
+                /*
                 using (var fbd = new FolderBrowserDialog())
                 {
                     var result = fbd.ShowDialog();
@@ -77,8 +77,25 @@ namespace WaveletDecompositionVisualizer
                         writer.WriteNBits(1, 7);
                         writer.Dispose();
                     }
+                }*/
+
+                using (var fbd = new FolderBrowserDialog())
+                {
+                    var result = fbd.ShowDialog();
+                    if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                    {
+                        var compressedFilePath = fbd.SelectedPath + saveFileName;
+                        using (Stream writer = new FileStream(compressedFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
+                        {
+                            using (BinaryWriter binaryWriter = new BinaryWriter(writer))
+                            {
+                                for (int i = 0; i < size; i++)
+                                    for (int j = 0; j < size; j++)
+                                        binaryWriter.Write(waveletImage[i, j]);
+                            }
+                        }
+                    }
                 }
-                
 
                 MessageBox.Show("Image succesfully saved!");
             }
@@ -158,8 +175,8 @@ namespace WaveletDecompositionVisualizer
             {
                 inputFilePathWavelet = ofd.FileName;
 
-                bmpObject = Helpers.ReadBmpFormat(inputFilePathWavelet);
-                waveletImage = bmpObject.GetBmpFloatData();
+                bmpObject = Helpers.ReadBmpFormat(inputFilePathWavelet, true);
+                waveletImage = bmpObject.GetWaveletFloatData();
                 pictureBoxWaveletImage.Image = Helpers.BuildBitmapFromMatrix(waveletImage);
             }
 
@@ -270,18 +287,18 @@ namespace WaveletDecompositionVisualizer
         {
             try
             {
-                if (Helpers.HasAllValuesZeros(BmpFileObject.auxImage))
+                if (Helpers.HasAllValuesZeros(BmpWvlFileObject.auxImage))
                     throw new NullReferenceException();
 
                 var min = int.MaxValue;
                 var max = int.MinValue;
-                var size = (int)Math.Sqrt(BmpFileObject.auxImage.Length);
+                var size = (int)Math.Sqrt(BmpWvlFileObject.auxImage.Length);
 
                 for (int i = 0; i < size; i++)
                 {
                     for (int j = 0; j < size; j++)
                     {
-                        var errorValue = (int)(BmpFileObject.auxImage[i, j] - Math.Round(waveletImage[i, j]));
+                        var errorValue = (int)(BmpWvlFileObject.auxImage[i, j] - Math.Round(waveletImage[i, j]));
                         if (errorValue < min)
                             min = errorValue;
                         if (errorValue > max)
