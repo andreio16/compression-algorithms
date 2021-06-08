@@ -71,31 +71,14 @@ namespace WaveletDecompositionVisualizer
                         {
                             for (int j = 0; j < size; j++)
                             {
-                                writer.WriteNBits((uint)(Math.Round(waveletImage[i, j])), 8);
+                                writer.WriteNBits((uint)(Math.Round(waveletImage[j, size - 1 - i])), 8);
                             }
                         }
                         writer.WriteNBits(1, 7);
                         writer.Dispose();
                     }
                 }
-
-                //using (var fbd = new FolderBrowserDialog())
-                //{
-                //    var result = fbd.ShowDialog();
-                //    if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
-                //    {
-                //        var compressedFilePath = fbd.SelectedPath + saveFileName;
-                //        using (Stream writer = new FileStream(compressedFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
-                //        {
-                //            using (BinaryWriter binaryWriter = new BinaryWriter(writer))
-                //            {
-                //                for (int i = 0; i < size; i++)
-                //                    for (int j = 0; j < size; j++)
-                //                        binaryWriter.Write(waveletImage[i,j]);
-                //            }
-                //        }
-                //    }
-                //}
+                
 
                 MessageBox.Show("Image succesfully saved!");
             }

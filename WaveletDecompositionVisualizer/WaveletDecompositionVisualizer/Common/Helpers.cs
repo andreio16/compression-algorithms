@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Drawing;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace WaveletDecompositionVisualizer.Common
                     var value = (int)dataMatrix[i, j]; 
                     if (value > 255) value = 255;
                     if (value < 0) value = 0;
-                    image.SetPixel(j, size - 1 - i, Color.FromArgb(value, value, value));
+                    image.SetPixel(i, j, Color.FromArgb(value, value, value));
                 }
             }
 
@@ -42,20 +43,20 @@ namespace WaveletDecompositionVisualizer.Common
             {
                 for (int j = 0; j < size; j++)
                 {
-                    // no scaling for the left corner [delimited by x & y]    (i <= x && j <= y)
+                    // no scaling for the left corner [delimited by x & y]
                     if (i <= x && j <= y)
                     {
                         var value = (int)dataMatrix[i, j];
                         if (value > 255) value = 255;
                         if (value < 0) value = 0;
-                        result.SetPixel(j, size - 1 - i, Color.FromArgb(value, value, value));
+                        result.SetPixel(i, j, Color.FromArgb(value, value, value));  //j, size - 1 - i
                     }
                     else // apply scaling in the rest of matrix
                     {
                         var value = (int)(dataMatrix[i, j] * scale + offset);
                         if (value > 255) value = 255;
                         if (value < 0) value = 0;
-                        result.SetPixel(j, size - 1 - i, Color.FromArgb(value, value, value));
+                        result.SetPixel(i, j, Color.FromArgb(value, value, value));
                     }
                 }
             }
@@ -173,17 +174,18 @@ namespace WaveletDecompositionVisualizer.Common
         {
             _image = new Bitmap(512, 512);
             _dataContainer = new byte[512, 512];
+            
             BitReader reader = new BitReader(filePath);
 
             for (int i = 0; i < _headerContainer.Length; i++)
                 _headerContainer[i] = (byte)reader.ReadNBits(8);
 
-            for (int i = 0; i < 512; i++)
+            for (int i = 511; i >= 0; i--)
             {
                 for (int j = 0; j < 512; j++)
                 {
-                    _dataContainer[i, j] = (byte)reader.ReadNBits(8);
-                    _image.SetPixel(j, 511 - i, Color.FromArgb(_dataContainer[i, j], _dataContainer[i, j], _dataContainer[i, j]));
+                    _dataContainer[j, i] = (byte)reader.ReadNBits(8);
+                    _image.SetPixel(j, i, Color.FromArgb(_dataContainer[j, i], _dataContainer[j, i], _dataContainer[j, i]));
                 }
             }
 
