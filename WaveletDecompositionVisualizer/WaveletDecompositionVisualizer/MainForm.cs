@@ -9,7 +9,7 @@ namespace WaveletDecompositionVisualizer
 {
     public partial class MainForm : Form
     {
-        private BmpWvlFileObject bmpObject;
+        private BmpWvlFileObject fileReaderObject;
         private string inputFilePathEncoder = @"";
         private string inputFilePathWavelet = @"";
 
@@ -22,6 +22,7 @@ namespace WaveletDecompositionVisualizer
         }
 
         #region Form Designer Methods -- ENCODER
+
         private void btnLoadBMP_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
@@ -31,12 +32,12 @@ namespace WaveletDecompositionVisualizer
             {
                 inputFilePathEncoder = ofd.FileName;
 
-                bmpObject = Helpers.ReadBmpFormat(inputFilePathEncoder, false);
-                pictureBoxOriginalImage.Image = bmpObject.GetBmpImage();
+                fileReaderObject = Helpers.ReadBmpFormat(inputFilePathEncoder, false);
+                pictureBoxOriginalImage.Image = fileReaderObject.GetBmpImage();
 
-                BmpWvlFileObject.auxImage = bmpObject.GetBmpData();
+                BmpWvlFileObject.auxImage = fileReaderObject.GetBmpData();
 
-                waveletImage = bmpObject.GetBmpFloatData();
+                waveletImage = fileReaderObject.GetBmpFloatData();
                 pictureBoxWaveletImage.Image = Helpers.BuildBitmapFromMatrix(waveletImage);
             }
         }
@@ -45,10 +46,10 @@ namespace WaveletDecompositionVisualizer
         {
             try
             {
-                if (bmpObject == null)
+                if (fileReaderObject == null)
                     throw new NullReferenceException();
 
-                var headerBmpFile = bmpObject.GetBmpHeader();
+                var headerBmpFile = fileReaderObject.GetBmpHeader();
                 var size = (int)Math.Sqrt(waveletImage.Length);
                 var saveFileName  = "\\" + Path.GetFileNameWithoutExtension(inputFilePathEncoder) + ".wvl";
                 /*
@@ -109,10 +110,70 @@ namespace WaveletDecompositionVisualizer
         {
             try
             {
-                if (bmpObject == null)
+                if (fileReaderObject == null)
                     throw new NullReferenceException();
 
                 DoAnalysisHorizontal(512);
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Warning: You forgot to load image first!");
+            }
+        }
+
+        private void btnAnH2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (fileReaderObject == null)
+                    throw new NullReferenceException();
+
+                DoAnalysisHorizontal(256);
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Warning: You forgot to load image first!");
+            }
+        }
+
+        private void btnAnH3_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (fileReaderObject == null)
+                    throw new NullReferenceException();
+
+                DoAnalysisHorizontal(128);
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Warning: You forgot to load image first!");
+            }
+        }
+
+        private void btnAnH4_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (fileReaderObject == null)
+                    throw new NullReferenceException();
+
+                DoAnalysisHorizontal(64);
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Warning: You forgot to load image first!");
+            }
+        }
+
+        private void btnAnH5_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (fileReaderObject == null)
+                    throw new NullReferenceException();
+
+                DoAnalysisHorizontal(32);
             }
             catch (NullReferenceException)
             {
@@ -124,10 +185,70 @@ namespace WaveletDecompositionVisualizer
         {
             try
             {
-                if (bmpObject == null)
+                if (fileReaderObject == null)
                     throw new NullReferenceException();
 
                 DoAnalysisVertical(512);
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Warning: You forgot to load image first!");
+            }
+        }
+
+        private void btnAnV2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (fileReaderObject == null)
+                    throw new NullReferenceException();
+
+                DoAnalysisVertical(256);
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Warning: You forgot to load image first!");
+            }
+        }
+
+        private void btnAnV3_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (fileReaderObject == null)
+                    throw new NullReferenceException();
+
+                DoAnalysisVertical(128);
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Warning: You forgot to load image first!");
+            }
+        }
+
+        private void btnAnV4_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (fileReaderObject == null)
+                    throw new NullReferenceException();
+
+                DoAnalysisVertical(64);
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Warning: You forgot to load image first!");
+            }
+        }
+
+        private void btnAnV5_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (fileReaderObject == null)
+                    throw new NullReferenceException();
+
+                DoAnalysisVertical(32);
             }
             catch (NullReferenceException)
             {
@@ -141,7 +262,7 @@ namespace WaveletDecompositionVisualizer
             {
                 var column = Helpers.ExtractColumnX(i, waveletImage);
                 var codedColumn = wvlEngine.MakeAnalysis(column, size);
-                Helpers.UpdateColumnX(i, codedColumn.ToArray(), ref waveletImage);
+                Helpers.UpdateColumnX(i, codedColumn.ToArray(), size, ref waveletImage);
             }
 
             numericUpDownX.Value = size / 2;
@@ -155,17 +276,19 @@ namespace WaveletDecompositionVisualizer
             {
                 var line = Helpers.ExtractLineX(i, waveletImage);
                 var codedLine = wvlEngine.MakeAnalysis(line, size);
-                Helpers.UpdateLineX(i, codedLine.ToArray(), ref waveletImage);
+                Helpers.UpdateLineX(i, codedLine.ToArray(), size, ref waveletImage);
             }
 
             numericUpDownX.Value = size;
             numericUpDownY.Value = size / 2;
             btnShowWavelet_Click(null, null);
         }
+
         #endregion
 
 
         #region Form Designer Methods -- DECODER
+
         private void btnLoadWVL_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
@@ -175,8 +298,8 @@ namespace WaveletDecompositionVisualizer
             {
                 inputFilePathWavelet = ofd.FileName;
 
-                bmpObject = Helpers.ReadBmpFormat(inputFilePathWavelet, true);
-                waveletImage = bmpObject.GetWaveletFloatData();
+                fileReaderObject = Helpers.ReadBmpFormat(inputFilePathWavelet, true);
+                waveletImage = fileReaderObject.GetWaveletFloatData();
                 pictureBoxWaveletImage.Image = Helpers.BuildBitmapFromMatrix(waveletImage);
             }
 
@@ -187,10 +310,70 @@ namespace WaveletDecompositionVisualizer
         {
             try
             {
-                if (bmpObject == null)
+                if (fileReaderObject == null)
                     throw new NullReferenceException();
 
                 DoSynthesisHorizontal(512);
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Warning: You forgot to load image first!");
+            }
+        }
+
+        private void btnSyH2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (fileReaderObject == null)
+                    throw new NullReferenceException();
+
+                DoSynthesisHorizontal(256);
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Warning: You forgot to load image first!");
+            }
+        }
+
+        private void btnSyH3_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (fileReaderObject == null)
+                    throw new NullReferenceException();
+
+                DoSynthesisHorizontal(128);
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Warning: You forgot to load image first!");
+            }
+        }
+
+        private void btnSyH4_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (fileReaderObject == null)
+                    throw new NullReferenceException();
+
+                DoSynthesisHorizontal(64);
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Warning: You forgot to load image first!");
+            }
+        }
+
+        private void btnSyH5_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (fileReaderObject == null)
+                    throw new NullReferenceException();
+
+                DoSynthesisHorizontal(32);
             }
             catch (NullReferenceException)
             {
@@ -202,7 +385,7 @@ namespace WaveletDecompositionVisualizer
         {
             try
             {
-                if (bmpObject == null)
+                if (fileReaderObject == null)
                     throw new NullReferenceException();
 
                 DoSynthesisVertical(512);
@@ -214,13 +397,73 @@ namespace WaveletDecompositionVisualizer
 
         }
 
+        private void btnSyv2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (fileReaderObject == null)
+                    throw new NullReferenceException();
+
+                DoSynthesisVertical(256);
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Warning: You forgot to load image first!");
+            }
+        }
+
+        private void btnSyV3_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (fileReaderObject == null)
+                    throw new NullReferenceException();
+
+                DoSynthesisVertical(128);
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Warning: You forgot to load image first!");
+            }
+        }
+
+        private void btnSyV4_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (fileReaderObject == null)
+                    throw new NullReferenceException();
+
+                DoSynthesisVertical(64);
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Warning: You forgot to load image first!");
+            }
+        }
+
+        private void btnSyV5_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (fileReaderObject == null)
+                    throw new NullReferenceException();
+
+                DoSynthesisVertical(32);
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Warning: You forgot to load image first!");
+            }
+        }
+
         private void DoSynthesisHorizontal(int size)
         {
             for (int i = 0; i < size; i++)
             {
                 var column = Helpers.ExtractColumnX(i, waveletImage);
                 var decodedColumn = wvlEngine.MakeSynthesis(column, size);
-                Helpers.UpdateColumnX(i, decodedColumn.ToArray(), ref waveletImage);
+                Helpers.UpdateColumnX(i, decodedColumn.ToArray(), size, ref waveletImage);
             }
 
             numericUpDownX.Value = size;
@@ -234,25 +477,27 @@ namespace WaveletDecompositionVisualizer
             {
                 var line = Helpers.ExtractLineX(i, waveletImage);
                 var decodedLine = wvlEngine.MakeSynthesis(line, size);
-                Helpers.UpdateLineX(i, decodedLine.ToArray(), ref waveletImage);
+                Helpers.UpdateLineX(i, decodedLine.ToArray(), size, ref waveletImage);
             }
 
             numericUpDownX.Value = size;
             numericUpDownY.Value = size;
             btnShowWavelet_Click(null, null);
         }
+
         #endregion
 
 
-        #region UI Elements
+        #region UI Display Elements
+
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             try
             {
-                if (bmpObject == null)
+                if (fileReaderObject == null)
                     throw new NullReferenceException();
 
-                waveletImage = bmpObject.GetBmpFloatData();
+                waveletImage = fileReaderObject.GetBmpFloatData();
 
                 numericUpDownX.Value = numericUpDownX.Maximum;
                 numericUpDownY.Value = numericUpDownY.Maximum;
@@ -268,7 +513,7 @@ namespace WaveletDecompositionVisualizer
         {
             try
             {
-                if (bmpObject == null)
+                if (fileReaderObject == null)
                     throw new NullReferenceException();
 
                 var x = (int)numericUpDownX.Value;
@@ -313,9 +558,8 @@ namespace WaveletDecompositionVisualizer
                 MessageBox.Show("Please load both .bmp and .wvl images!");
             }
         }
-
+        
         #endregion
-
 
     }
 }

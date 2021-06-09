@@ -34,6 +34,22 @@
             this.pictureBoxWaveletImage = new System.Windows.Forms.PictureBox();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBoxWaveletImage = new System.Windows.Forms.GroupBox();
+            this.btnSyV5 = new System.Windows.Forms.Button();
+            this.btnSyH5 = new System.Windows.Forms.Button();
+            this.btnAnV5 = new System.Windows.Forms.Button();
+            this.btnAnH5 = new System.Windows.Forms.Button();
+            this.btnSyV4 = new System.Windows.Forms.Button();
+            this.btnSyH4 = new System.Windows.Forms.Button();
+            this.btnAnV4 = new System.Windows.Forms.Button();
+            this.btnAnH4 = new System.Windows.Forms.Button();
+            this.btnSyV3 = new System.Windows.Forms.Button();
+            this.btnSyH3 = new System.Windows.Forms.Button();
+            this.btnAnV3 = new System.Windows.Forms.Button();
+            this.btnAnH3 = new System.Windows.Forms.Button();
+            this.btnSyv2 = new System.Windows.Forms.Button();
+            this.btnSyH2 = new System.Windows.Forms.Button();
+            this.btnAnV2 = new System.Windows.Forms.Button();
+            this.btnAnH2 = new System.Windows.Forms.Button();
             this.btnShowWavelet = new System.Windows.Forms.Button();
             this.btnRefresh = new System.Windows.Forms.Button();
             this.btnSyV1 = new System.Windows.Forms.Button();
@@ -125,6 +141,22 @@
             // 
             // groupBoxWaveletImage
             // 
+            this.groupBoxWaveletImage.Controls.Add(this.btnSyV5);
+            this.groupBoxWaveletImage.Controls.Add(this.btnSyH5);
+            this.groupBoxWaveletImage.Controls.Add(this.btnAnV5);
+            this.groupBoxWaveletImage.Controls.Add(this.btnAnH5);
+            this.groupBoxWaveletImage.Controls.Add(this.btnSyV4);
+            this.groupBoxWaveletImage.Controls.Add(this.btnSyH4);
+            this.groupBoxWaveletImage.Controls.Add(this.btnAnV4);
+            this.groupBoxWaveletImage.Controls.Add(this.btnAnH4);
+            this.groupBoxWaveletImage.Controls.Add(this.btnSyV3);
+            this.groupBoxWaveletImage.Controls.Add(this.btnSyH3);
+            this.groupBoxWaveletImage.Controls.Add(this.btnAnV3);
+            this.groupBoxWaveletImage.Controls.Add(this.btnAnH3);
+            this.groupBoxWaveletImage.Controls.Add(this.btnSyv2);
+            this.groupBoxWaveletImage.Controls.Add(this.btnSyH2);
+            this.groupBoxWaveletImage.Controls.Add(this.btnAnV2);
+            this.groupBoxWaveletImage.Controls.Add(this.btnAnH2);
             this.groupBoxWaveletImage.Controls.Add(this.btnShowWavelet);
             this.groupBoxWaveletImage.Controls.Add(this.btnRefresh);
             this.groupBoxWaveletImage.Controls.Add(this.btnSyV1);
@@ -137,6 +169,182 @@
             this.groupBoxWaveletImage.TabIndex = 6;
             this.groupBoxWaveletImage.TabStop = false;
             this.groupBoxWaveletImage.Text = "Wavelet Operations";
+            // 
+            // btnSyV5
+            // 
+            this.btnSyV5.Location = new System.Drawing.Point(169, 137);
+            this.btnSyV5.Margin = new System.Windows.Forms.Padding(2);
+            this.btnSyV5.Name = "btnSyV5";
+            this.btnSyV5.Size = new System.Drawing.Size(45, 25);
+            this.btnSyV5.TabIndex = 25;
+            this.btnSyV5.Text = "Sy V5";
+            this.btnSyV5.UseVisualStyleBackColor = true;
+            this.btnSyV5.Click += new System.EventHandler(this.btnSyV5_Click);
+            // 
+            // btnSyH5
+            // 
+            this.btnSyH5.Location = new System.Drawing.Point(169, 107);
+            this.btnSyH5.Margin = new System.Windows.Forms.Padding(2);
+            this.btnSyH5.Name = "btnSyH5";
+            this.btnSyH5.Size = new System.Drawing.Size(45, 25);
+            this.btnSyH5.TabIndex = 24;
+            this.btnSyH5.Text = "Sy H5";
+            this.btnSyH5.UseVisualStyleBackColor = true;
+            this.btnSyH5.Click += new System.EventHandler(this.btnSyH5_Click);
+            // 
+            // btnAnV5
+            // 
+            this.btnAnV5.Location = new System.Drawing.Point(119, 136);
+            this.btnAnV5.Margin = new System.Windows.Forms.Padding(2);
+            this.btnAnV5.Name = "btnAnV5";
+            this.btnAnV5.Size = new System.Drawing.Size(46, 25);
+            this.btnAnV5.TabIndex = 23;
+            this.btnAnV5.Text = "An V5";
+            this.btnAnV5.UseVisualStyleBackColor = true;
+            this.btnAnV5.Click += new System.EventHandler(this.btnAnV5_Click);
+            // 
+            // btnAnH5
+            // 
+            this.btnAnH5.Location = new System.Drawing.Point(119, 107);
+            this.btnAnH5.Margin = new System.Windows.Forms.Padding(2);
+            this.btnAnH5.Name = "btnAnH5";
+            this.btnAnH5.Size = new System.Drawing.Size(46, 25);
+            this.btnAnH5.TabIndex = 22;
+            this.btnAnH5.Text = "An H5";
+            this.btnAnH5.UseVisualStyleBackColor = true;
+            this.btnAnH5.Click += new System.EventHandler(this.btnAnH5_Click);
+            // 
+            // btnSyV4
+            // 
+            this.btnSyV4.Location = new System.Drawing.Point(169, 64);
+            this.btnSyV4.Margin = new System.Windows.Forms.Padding(2);
+            this.btnSyV4.Name = "btnSyV4";
+            this.btnSyV4.Size = new System.Drawing.Size(45, 25);
+            this.btnSyV4.TabIndex = 21;
+            this.btnSyV4.Text = "Sy V4";
+            this.btnSyV4.UseVisualStyleBackColor = true;
+            this.btnSyV4.Click += new System.EventHandler(this.btnSyV4_Click);
+            // 
+            // btnSyH4
+            // 
+            this.btnSyH4.Location = new System.Drawing.Point(169, 34);
+            this.btnSyH4.Margin = new System.Windows.Forms.Padding(2);
+            this.btnSyH4.Name = "btnSyH4";
+            this.btnSyH4.Size = new System.Drawing.Size(45, 25);
+            this.btnSyH4.TabIndex = 20;
+            this.btnSyH4.Text = "Sy H4";
+            this.btnSyH4.UseVisualStyleBackColor = true;
+            this.btnSyH4.Click += new System.EventHandler(this.btnSyH4_Click);
+            // 
+            // btnAnV4
+            // 
+            this.btnAnV4.Location = new System.Drawing.Point(119, 63);
+            this.btnAnV4.Margin = new System.Windows.Forms.Padding(2);
+            this.btnAnV4.Name = "btnAnV4";
+            this.btnAnV4.Size = new System.Drawing.Size(46, 25);
+            this.btnAnV4.TabIndex = 19;
+            this.btnAnV4.Text = "An V4";
+            this.btnAnV4.UseVisualStyleBackColor = true;
+            this.btnAnV4.Click += new System.EventHandler(this.btnAnV4_Click);
+            // 
+            // btnAnH4
+            // 
+            this.btnAnH4.Location = new System.Drawing.Point(119, 34);
+            this.btnAnH4.Margin = new System.Windows.Forms.Padding(2);
+            this.btnAnH4.Name = "btnAnH4";
+            this.btnAnH4.Size = new System.Drawing.Size(46, 25);
+            this.btnAnH4.TabIndex = 18;
+            this.btnAnH4.Text = "An H4";
+            this.btnAnH4.UseVisualStyleBackColor = true;
+            this.btnAnH4.Click += new System.EventHandler(this.btnAnH4_Click);
+            // 
+            // btnSyV3
+            // 
+            this.btnSyV3.Location = new System.Drawing.Point(57, 213);
+            this.btnSyV3.Margin = new System.Windows.Forms.Padding(2);
+            this.btnSyV3.Name = "btnSyV3";
+            this.btnSyV3.Size = new System.Drawing.Size(45, 25);
+            this.btnSyV3.TabIndex = 17;
+            this.btnSyV3.Text = "Sy V3";
+            this.btnSyV3.UseVisualStyleBackColor = true;
+            this.btnSyV3.Click += new System.EventHandler(this.btnSyV3_Click);
+            // 
+            // btnSyH3
+            // 
+            this.btnSyH3.Location = new System.Drawing.Point(57, 183);
+            this.btnSyH3.Margin = new System.Windows.Forms.Padding(2);
+            this.btnSyH3.Name = "btnSyH3";
+            this.btnSyH3.Size = new System.Drawing.Size(45, 25);
+            this.btnSyH3.TabIndex = 16;
+            this.btnSyH3.Text = "Sy H3";
+            this.btnSyH3.UseVisualStyleBackColor = true;
+            this.btnSyH3.Click += new System.EventHandler(this.btnSyH3_Click);
+            // 
+            // btnAnV3
+            // 
+            this.btnAnV3.Location = new System.Drawing.Point(7, 213);
+            this.btnAnV3.Margin = new System.Windows.Forms.Padding(2);
+            this.btnAnV3.Name = "btnAnV3";
+            this.btnAnV3.Size = new System.Drawing.Size(46, 25);
+            this.btnAnV3.TabIndex = 15;
+            this.btnAnV3.Text = "An V3";
+            this.btnAnV3.UseVisualStyleBackColor = true;
+            this.btnAnV3.Click += new System.EventHandler(this.btnAnV3_Click);
+            // 
+            // btnAnH3
+            // 
+            this.btnAnH3.Location = new System.Drawing.Point(7, 183);
+            this.btnAnH3.Margin = new System.Windows.Forms.Padding(2);
+            this.btnAnH3.Name = "btnAnH3";
+            this.btnAnH3.Size = new System.Drawing.Size(46, 25);
+            this.btnAnH3.TabIndex = 14;
+            this.btnAnH3.Text = "An H3";
+            this.btnAnH3.UseVisualStyleBackColor = true;
+            this.btnAnH3.Click += new System.EventHandler(this.btnAnH3_Click);
+            // 
+            // btnSyv2
+            // 
+            this.btnSyv2.Location = new System.Drawing.Point(57, 137);
+            this.btnSyv2.Margin = new System.Windows.Forms.Padding(2);
+            this.btnSyv2.Name = "btnSyv2";
+            this.btnSyv2.Size = new System.Drawing.Size(45, 25);
+            this.btnSyv2.TabIndex = 13;
+            this.btnSyv2.Text = "Sy V2";
+            this.btnSyv2.UseVisualStyleBackColor = true;
+            this.btnSyv2.Click += new System.EventHandler(this.btnSyv2_Click);
+            // 
+            // btnSyH2
+            // 
+            this.btnSyH2.Location = new System.Drawing.Point(57, 107);
+            this.btnSyH2.Margin = new System.Windows.Forms.Padding(2);
+            this.btnSyH2.Name = "btnSyH2";
+            this.btnSyH2.Size = new System.Drawing.Size(45, 25);
+            this.btnSyH2.TabIndex = 12;
+            this.btnSyH2.Text = "Sy H2";
+            this.btnSyH2.UseVisualStyleBackColor = true;
+            this.btnSyH2.Click += new System.EventHandler(this.btnSyH2_Click);
+            // 
+            // btnAnV2
+            // 
+            this.btnAnV2.Location = new System.Drawing.Point(7, 137);
+            this.btnAnV2.Margin = new System.Windows.Forms.Padding(2);
+            this.btnAnV2.Name = "btnAnV2";
+            this.btnAnV2.Size = new System.Drawing.Size(46, 25);
+            this.btnAnV2.TabIndex = 11;
+            this.btnAnV2.Text = "An V2";
+            this.btnAnV2.UseVisualStyleBackColor = true;
+            this.btnAnV2.Click += new System.EventHandler(this.btnAnV2_Click);
+            // 
+            // btnAnH2
+            // 
+            this.btnAnH2.Location = new System.Drawing.Point(7, 107);
+            this.btnAnH2.Margin = new System.Windows.Forms.Padding(2);
+            this.btnAnH2.Name = "btnAnH2";
+            this.btnAnH2.Size = new System.Drawing.Size(46, 25);
+            this.btnAnH2.TabIndex = 10;
+            this.btnAnH2.Text = "An H2";
+            this.btnAnH2.UseVisualStyleBackColor = true;
+            this.btnAnH2.Click += new System.EventHandler(this.btnAnH2_Click);
             // 
             // btnShowWavelet
             // 
@@ -162,10 +370,10 @@
             // 
             // btnSyV1
             // 
-            this.btnSyV1.Location = new System.Drawing.Point(126, 70);
+            this.btnSyV1.Location = new System.Drawing.Point(57, 63);
             this.btnSyV1.Margin = new System.Windows.Forms.Padding(2);
             this.btnSyV1.Name = "btnSyV1";
-            this.btnSyV1.Size = new System.Drawing.Size(77, 25);
+            this.btnSyV1.Size = new System.Drawing.Size(45, 25);
             this.btnSyV1.TabIndex = 7;
             this.btnSyV1.Text = "Sy V1";
             this.btnSyV1.UseVisualStyleBackColor = true;
@@ -173,10 +381,10 @@
             // 
             // btnSyH1
             // 
-            this.btnSyH1.Location = new System.Drawing.Point(126, 32);
+            this.btnSyH1.Location = new System.Drawing.Point(57, 34);
             this.btnSyH1.Margin = new System.Windows.Forms.Padding(2);
             this.btnSyH1.Name = "btnSyH1";
-            this.btnSyH1.Size = new System.Drawing.Size(77, 25);
+            this.btnSyH1.Size = new System.Drawing.Size(45, 25);
             this.btnSyH1.TabIndex = 6;
             this.btnSyH1.Text = "Sy H1";
             this.btnSyH1.UseVisualStyleBackColor = true;
@@ -184,10 +392,10 @@
             // 
             // btnAnV1
             // 
-            this.btnAnV1.Location = new System.Drawing.Point(24, 70);
+            this.btnAnV1.Location = new System.Drawing.Point(7, 63);
             this.btnAnV1.Margin = new System.Windows.Forms.Padding(2);
             this.btnAnV1.Name = "btnAnV1";
-            this.btnAnV1.Size = new System.Drawing.Size(77, 25);
+            this.btnAnV1.Size = new System.Drawing.Size(46, 25);
             this.btnAnV1.TabIndex = 5;
             this.btnAnV1.Text = "An V1";
             this.btnAnV1.UseVisualStyleBackColor = true;
@@ -195,10 +403,10 @@
             // 
             // btnAnH1
             // 
-            this.btnAnH1.Location = new System.Drawing.Point(24, 32);
+            this.btnAnH1.Location = new System.Drawing.Point(7, 34);
             this.btnAnH1.Margin = new System.Windows.Forms.Padding(2);
             this.btnAnH1.Name = "btnAnH1";
-            this.btnAnH1.Size = new System.Drawing.Size(77, 25);
+            this.btnAnH1.Size = new System.Drawing.Size(46, 25);
             this.btnAnH1.TabIndex = 4;
             this.btnAnH1.Text = "An H1";
             this.btnAnH1.UseVisualStyleBackColor = true;
@@ -493,6 +701,22 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox textBoxMaxErrorValue;
         private System.Windows.Forms.TextBox textBoxMinErrorValue;
+        private System.Windows.Forms.Button btnSyv2;
+        private System.Windows.Forms.Button btnSyH2;
+        private System.Windows.Forms.Button btnAnV2;
+        private System.Windows.Forms.Button btnAnH2;
+        private System.Windows.Forms.Button btnSyV3;
+        private System.Windows.Forms.Button btnSyH3;
+        private System.Windows.Forms.Button btnAnV3;
+        private System.Windows.Forms.Button btnAnH3;
+        private System.Windows.Forms.Button btnSyV5;
+        private System.Windows.Forms.Button btnSyH5;
+        private System.Windows.Forms.Button btnAnV5;
+        private System.Windows.Forms.Button btnAnH5;
+        private System.Windows.Forms.Button btnSyV4;
+        private System.Windows.Forms.Button btnSyH4;
+        private System.Windows.Forms.Button btnAnV4;
+        private System.Windows.Forms.Button btnAnH4;
     }
 }
 

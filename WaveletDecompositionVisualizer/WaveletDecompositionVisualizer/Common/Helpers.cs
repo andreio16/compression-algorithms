@@ -103,17 +103,15 @@ namespace WaveletDecompositionVisualizer.Common
             return line;
         }
 
-        public static void UpdateColumnX(int x, float[] column, ref float[,] matrix)
+        public static void UpdateColumnX(int x, float[] column, int colSize, ref float[,] matrix)
         {
-            var size = (int)Math.Sqrt(matrix.Length);
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < colSize; i++)
                 matrix[i, x] = column[i];
         }
 
-        public static void UpdateLineX(int x, float[] line, ref float[,] matrix)
+        public static void UpdateLineX(int x, float[] line, int lineSize, ref float[,] matrix)
         {
-            var size = (int)Math.Sqrt(matrix.Length);
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < lineSize; i++)
                 matrix[x, i] = line[i];
         }
 
