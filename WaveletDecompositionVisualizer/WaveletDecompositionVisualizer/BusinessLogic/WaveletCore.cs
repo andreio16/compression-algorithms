@@ -57,6 +57,14 @@ namespace WaveletDecompositionVisualizer.BusinessLogic
         private readonly int filterSize  = 9;
         private readonly int paddingSize = 4;
 
+        private float[] ReturnNElementsFromVector(float[] vector, int length)
+        {
+            List<float> aux = new List<float>();
+            for (int i = 0; i < length; i++)
+                aux.Add(vector[i]);
+            return aux.ToArray();
+        }
+
         private List<float> BuildSyntesisVector(float[] lineLH, int length)
         {
             var lowUpSampleList = new List<float>();
@@ -95,6 +103,7 @@ namespace WaveletDecompositionVisualizer.BusinessLogic
         {
             var lowConvolutionList = new List<float>();
             var highConvolutionList = new List<float>();
+            line = ReturnNElementsFromVector(line, length);
             var processedLine = Helpers.AddReverseNElementsPadding(line, paddingSize);
 
             // Compute Convolution between processedLine and analysis filters (H) and (L)
@@ -121,10 +130,11 @@ namespace WaveletDecompositionVisualizer.BusinessLogic
 
             return resultVector;
         }
+        
+        public  List<float> MakeSynthesis(float[] inputVector, int length) { return BuildSyntesisVector(inputVector, length); }
 
-        public List<float> MakeSynthesis(float[] inputVector, int length) { return BuildSyntesisVector(inputVector, length); }
+        public  List<float> MakeAnalysis(float[] inputVector, int length) { return BuildAnalysisVectorLowHigh(inputVector, length); }
 
-        public List<float> MakeAnalysis(float[] inputVector, int length) { return BuildAnalysisVectorLowHigh(inputVector, length); }
         
     }
 }
